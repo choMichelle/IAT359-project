@@ -109,16 +109,12 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.buttonCaptureSave: {
-                capturePhoto();
-                break;
-            }
-            case R.id.buttonCaptureShow: {
-                Intent camera_intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(camera_intent, img_id);
-                break;
-            }
+        int id = view.getId();
+        if (id == R.id.buttonCaptureSave) {
+            capturePhoto();
+        } else if (id == R.id.buttonCaptureShow) {
+            Intent camera_intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(camera_intent, img_id);
         }
     }
 

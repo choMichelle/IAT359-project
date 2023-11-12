@@ -9,6 +9,7 @@ import android.os.Bundle;
 //first activity - no UI
 //checks if there is username/password data saved in sharedpreferences
 //redirects app to RegisterAccount activity if no data
+//RICKYTESTINGoh
 //redirects app to LoginAccount Activity if there is data
 public class AccountChecker extends Activity {
     public static final String DEFAULT = "No account data";

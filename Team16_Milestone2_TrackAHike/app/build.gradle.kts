@@ -4,7 +4,7 @@ plugins {
 
 android {
     namespace = "com.example.team16_milestone2_trackahike"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.example.team16_milestone2_trackahike"

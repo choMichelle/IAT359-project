@@ -14,4 +14,11 @@
         android:layout_gravity="center_vertical"
         android:text="StartCamera" />
 
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="239dp"
+        android:layout_height="132dp"
+        android:layout_weight="1"
+        android:text="TextView" />
+
 </LinearLayout>

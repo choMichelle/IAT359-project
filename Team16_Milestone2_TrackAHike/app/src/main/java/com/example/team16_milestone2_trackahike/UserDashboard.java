@@ -1,15 +1,20 @@
 package com.example.team16_milestone2_trackahike;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class UserDashboard extends AppCompatActivity implements View.OnClickListener {
 
     private Button trackButton, settingsButton, dashboardButton, allRecordsButton;
+
+    private TextView welcomeText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +30,12 @@ public class UserDashboard extends AppCompatActivity implements View.OnClickList
         settingsButton.setOnClickListener(this::gotoSettings);
         dashboardButton.setOnClickListener(this::gotoHome);
         allRecordsButton.setOnClickListener(this::gotoRecords);
+
+        SharedPreferences sharedPrefs = getSharedPreferences("MyData", Context.MODE_PRIVATE);
+
+
+
+
 
 
     }

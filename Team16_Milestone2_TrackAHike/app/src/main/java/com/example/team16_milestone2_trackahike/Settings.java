@@ -1,19 +1,29 @@
 package com.example.team16_milestone2_trackahike;
 
 import android.app.Activity;
-import android.os.Bundle;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 public class Settings extends Activity implements View.OnClickListener {
 
     Button buttonStartCamera;
+    EditText firstName, age, gender;
+    Button submitButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings);
+        firstName = (EditText)findViewById(R.id.firstName);
+        age = (EditText)findViewById(R.id.age);
+        gender = (EditText)findViewById(R.id.gender);
+        submitButton = findViewById(R.id.submitButton);
 
         buttonStartCamera = findViewById(R.id.StartCamera);
         buttonStartCamera.setOnClickListener(this);
@@ -23,5 +33,15 @@ public class Settings extends Activity implements View.OnClickListener {
     public void onClick(View view) {
         Intent i = new Intent(this, CameraActivity.class);
         startActivity(i);
+    }
+    public void submit (View view){
+        SharedPreferences sharedPrefs = getSharedPreferences("MyData", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPrefs.edit();
+        editor.putString("name", firstName.getText().toString());
+        editor.putString("age", age.getText().toString());
+        editor.putString("gender", gender.getText().toString());
+        Toast.makeText(this, "User Settings Have Been Updated", Toast.LENGTH_LONG).show();
+        editor.commit();
+
     }
 }

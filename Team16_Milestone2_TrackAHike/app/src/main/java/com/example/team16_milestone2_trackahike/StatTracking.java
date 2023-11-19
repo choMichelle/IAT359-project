@@ -39,6 +39,9 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
     private MyDatabase db;
     Context context;
 
+    private int REQUEST_CODE_PERMISSIONS = 1001;
+    private final String[] REQUIRED_PERMISSIONS = new String[]{"android.permission.ACTIVITY_RECOGNITION"};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,6 +93,11 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
             stepsText.setText(String.valueOf(totalSteps));
         }
 
+        if (allPermissionsGranted()) {
+            Log.i("Activity rec perms: ", "Active");
+        } else {
+            ActivityCompat.requestPermissions(this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS);
+        }
 
         //may need to request physical activity permission at runtime
         //can be manually activated via: app notif and settings -> permission manager
@@ -235,5 +243,15 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
     @Override
     public void onClick(View v) {
 
+    }
+
+    private boolean allPermissionsGranted() {
+
+        for (String permission : REQUIRED_PERMISSIONS) {
+            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+                return false;
+            }
+        }
+        return true;
     }
 }

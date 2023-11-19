@@ -16,11 +16,12 @@ public class MyDatabase {
 
     }
 
-    public long insertData(String name, String seconds) {
+    public long insertData(String name, String seconds, String steps) {
         db = helper.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(Constants.NAME, name);
         contentValues.put(Constants.TIME, seconds);
+        contentValues.put(Constants.STEPS, steps);
         long id = db.insert(Constants.TABLE_NAME, null, contentValues);
         return id;
     }

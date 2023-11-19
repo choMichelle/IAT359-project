@@ -28,7 +28,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
 
     @Override
     public void onBindViewHolder(CustomAdapter.MyViewHolder holder, int position) {
-        String item = list.get(position);
+        String item = list.get(position).toString();
         holder.recordNameText.setText(item);
     }
 
@@ -54,7 +54,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         @Override
         public void onClick(View view) {
             Intent i = new Intent(context, SpecificRecord.class);
-            //TODO - add data to identify record to display
+            i.putExtra("recordName", recordNameText.getText().toString());
             context.startActivity(i);
         }
     }

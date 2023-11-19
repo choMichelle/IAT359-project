@@ -36,13 +36,15 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
     private EditText sessionName;
     private SensorManager mSensorManager;
     private Sensor mStepCounter;
-    MyDatabase db;
+    private MyDatabase db;
     Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.stat_tracking);
+
+        db = new MyDatabase(this);
 
         timeText = (TextView) findViewById(R.id.timeTextView);
         stepsText = (TextView) findViewById(R.id.stepsTextView);
@@ -88,7 +90,6 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
             stepsText.setText(String.valueOf(totalSteps));
         }
 
-        db = new MyDatabase(this);
 
         //may need to request physical activity permission at runtime
         //can be manually activated via: app notif and settings -> permission manager

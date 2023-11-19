@@ -41,6 +41,8 @@ public class LoginAccount extends Activity implements View.OnClickListener {
         }
         else {
             Toast.makeText(this, "Username or password incorrect", Toast.LENGTH_SHORT).show();
+            Intent i = new Intent(this, RegisterAccount.class);
+            startActivity(i);
         }
 
     }

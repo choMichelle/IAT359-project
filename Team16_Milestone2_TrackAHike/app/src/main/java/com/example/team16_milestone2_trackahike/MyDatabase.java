@@ -2,6 +2,7 @@ package com.example.team16_milestone2_trackahike;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 public class MyDatabase {
@@ -24,5 +25,12 @@ public class MyDatabase {
         contentValues.put(Constants.STEPS, steps);
         long id = db.insert(Constants.TABLE_NAME, null, contentValues);
         return id;
+    }
+
+    public Cursor getData() {
+        SQLiteDatabase db = helper.getWritableDatabase();
+        String[] columns = {Constants.UID, Constants.NAME, Constants.TIME, Constants.STEPS};
+        Cursor cursor = db.query(Constants.TABLE_NAME, columns, null, null, null, null, null);
+        return cursor;
     }
 }

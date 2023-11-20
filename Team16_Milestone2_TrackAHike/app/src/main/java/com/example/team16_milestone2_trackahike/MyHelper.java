@@ -16,7 +16,8 @@ public class MyHelper extends SQLiteOpenHelper {
                     Constants.UID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     Constants.NAME + " TEXT, " +
                     Constants.TIME + " TEXT, " +
-                    Constants.STEPS + " TEXT);" ;
+                    Constants.STEPS + " TEXT, " +
+                    Constants.CATEGORY + " TEXT);" ;
 
     private static final String DROP_TABLE = "DROP TABLE IF EXISTS " + Constants.TABLE_NAME;
 
@@ -45,4 +46,5 @@ public class MyHelper extends SQLiteOpenHelper {
             Toast.makeText(context, "exception onUpgrade() db", Toast.LENGTH_LONG).show();
         }
     }
+
 }

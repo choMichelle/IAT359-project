@@ -19,6 +19,15 @@
         android:textAlignment="center"
         android:layout_gravity="center"/>
 
+    <EditText
+        android:id="@+id/currentSessionCategoryEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Add session to a group via name"
+        android:textSize="14sp"
+        android:textAlignment="center"
+        android:layout_gravity="center"/>
+
     <TextView
         android:id="@+id/timeTextView"
         android:layout_width="wrap_content"
@@ -26,6 +35,13 @@
         android:text="0:0:0"
         android:textSize="24sp"
         android:layout_gravity="center"/>
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Current stats:"
+        android:textSize="16sp" />
 
     <LinearLayout
         android:layout_width="match_parent"

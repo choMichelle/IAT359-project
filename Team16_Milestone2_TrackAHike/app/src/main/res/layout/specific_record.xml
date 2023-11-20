@@ -8,7 +8,7 @@
         android:id="@+id/currentRecordNameText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        android:text="No Record"
         android:textSize="24sp"
         android:gravity="center"
         android:layout_marginBottom="10dp"/>
@@ -33,6 +33,21 @@
         android:layout_height="wrap_content"
         android:text="0:0:0"
         android:textSize="20sp"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Category"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/recordedCategoryText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Text"
+        android:textSize="16sp"
         android:gravity="center"/>
 
     <TextView
@@ -96,6 +111,13 @@
         </LinearLayout>
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/deleteButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete record"
+        android:layout_gravity="center" />
 
 
 </LinearLayout>

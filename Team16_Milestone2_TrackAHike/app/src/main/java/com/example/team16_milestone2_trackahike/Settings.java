@@ -13,7 +13,7 @@ import android.widget.Toast;
 public class Settings extends Activity implements View.OnClickListener {
 
     Button buttonStartCamera;
-    EditText firstName, age, gender;
+    EditText firstName, age, gender,height;
     Button submitButton;
 
     @Override
@@ -23,6 +23,7 @@ public class Settings extends Activity implements View.OnClickListener {
         firstName = (EditText)findViewById(R.id.firstName);
         age = (EditText)findViewById(R.id.age);
         gender = (EditText)findViewById(R.id.gender);
+        height = (EditText)findViewById(R.id.height);
         submitButton = findViewById(R.id.submitButton);
 
         buttonStartCamera = findViewById(R.id.StartCamera);

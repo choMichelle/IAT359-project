@@ -14,6 +14,8 @@ public class UserDashboard extends AppCompatActivity implements View.OnClickList
 
     private Button trackButton, settingsButton, allRecordsButton;
 
+    public static final String DEFAULT= "";
+
     private TextView welcomeText;
 
     @Override
@@ -30,6 +32,9 @@ public class UserDashboard extends AppCompatActivity implements View.OnClickList
         allRecordsButton.setOnClickListener(this::gotoRecords);
 
         SharedPreferences sharedPrefs = getSharedPreferences("MyData", Context.MODE_PRIVATE);
+        String welcomeText = sharedPrefs.getString("name", DEFAULT);
+
+
 
 
 

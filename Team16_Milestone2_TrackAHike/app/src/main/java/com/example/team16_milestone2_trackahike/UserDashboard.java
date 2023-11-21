@@ -31,6 +31,8 @@ public class UserDashboard extends AppCompatActivity implements View.OnClickList
         settingsButton.setOnClickListener(this::gotoSettings);
         allRecordsButton.setOnClickListener(this::gotoRecords);
 
+
+        //shared preferences for the name and height data
         SharedPreferences sharedPrefs = getSharedPreferences("MyData", Context.MODE_PRIVATE);
         String welcomeText = sharedPrefs.getString("name", DEFAULT);
         String savedHeight = sharedPrefs.getString("height", DEFAULT);

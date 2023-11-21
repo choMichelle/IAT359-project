@@ -30,7 +30,8 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 public class CameraActivity extends AppCompatActivity implements View.OnClickListener {
-
+//code was taken from the camera lecture code
+    //testing functionality for now, will edit this code to fit our functionality
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
     PreviewView previewView;
     private CameraProvider cameraProvider;

@@ -25,9 +25,11 @@ public class Settings extends Activity implements View.OnClickListener {
         gender = (EditText)findViewById(R.id.gender);
         height = (EditText)findViewById(R.id.height);
         submitButton = findViewById(R.id.submitButton);
+        //setting up the edit text for name, age, gender, and height
 
         buttonStartCamera = findViewById(R.id.StartCamera);
         buttonStartCamera.setOnClickListener(this);
+        //button for starting the camera code
 
     }
 
@@ -42,6 +44,7 @@ public class Settings extends Activity implements View.OnClickListener {
         editor.putString("age", age.getText().toString());
         editor.putString("gender", gender.getText().toString());
         Toast.makeText(this, "User Settings Have Been Updated", Toast.LENGTH_LONG).show();
+        //displays toast when the user clicks the button
         editor.commit();
 
     }

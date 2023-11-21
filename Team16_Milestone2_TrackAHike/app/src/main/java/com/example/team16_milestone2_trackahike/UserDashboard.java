@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class UserDashboard extends AppCompatActivity implements View.OnClickListener {
 
-    private Button trackButton, settingsButton, dashboardButton, allRecordsButton;
+    private Button trackButton, settingsButton, allRecordsButton;
 
     private TextView welcomeText;
 
@@ -23,12 +23,10 @@ public class UserDashboard extends AppCompatActivity implements View.OnClickList
 
         trackButton = (Button) findViewById(R.id.trackButton);
         settingsButton = (Button) findViewById(R.id.settingsButton);
-        dashboardButton = (Button) findViewById(R.id.homeButton);
         allRecordsButton = (Button) findViewById(R.id.allRecButton);
 
         trackButton.setOnClickListener(this::gotoTracking);
         settingsButton.setOnClickListener(this::gotoSettings);
-        dashboardButton.setOnClickListener(this::gotoHome);
         allRecordsButton.setOnClickListener(this::gotoRecords);
 
         SharedPreferences sharedPrefs = getSharedPreferences("MyData", Context.MODE_PRIVATE);
@@ -47,11 +45,6 @@ public class UserDashboard extends AppCompatActivity implements View.OnClickList
 
     public void gotoSettings(View view){
         Intent i = new Intent(this, Settings.class);
-        startActivity(i);
-    }
-
-    public void gotoHome(View view) {
-        Intent i = new Intent(this, UserDashboard.class);
         startActivity(i);
     }
 

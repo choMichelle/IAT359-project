@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.widget.Toast;
 
+//used to create/update database schema
 public class MyHelper extends SQLiteOpenHelper {
 
     Context context;

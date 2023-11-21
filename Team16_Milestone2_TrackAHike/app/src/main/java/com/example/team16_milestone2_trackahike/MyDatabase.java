@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
 
+//used to interact with data in the database
 public class MyDatabase {
 
     private SQLiteDatabase db;
@@ -19,6 +20,7 @@ public class MyDatabase {
 
     }
 
+    //add record into db
     public long insertData(String name, String seconds, String steps, String category) {
         db = helper.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -30,6 +32,7 @@ public class MyDatabase {
         return id;
     }
 
+    //get cursor for all data
     public Cursor getData() {
         SQLiteDatabase db = helper.getWritableDatabase();
         String[] columns = {Constants.UID, Constants.NAME, Constants.TIME, Constants.STEPS, Constants.CATEGORY};
@@ -37,6 +40,7 @@ public class MyDatabase {
         return cursor;
     }
 
+    //return filtered records
     public ArrayList<String> getFilteredData(String category) {
         SQLiteDatabase db = helper.getWritableDatabase();
         String[] columns = {Constants.NAME, Constants.TIME, Constants.STEPS, Constants.CATEGORY};
@@ -57,6 +61,7 @@ public class MyDatabase {
         return filteredResults;
     }
 
+    //delete selected record from db
     public void deleteRecord(String currentRecordID) {
         SQLiteDatabase db = helper.getWritableDatabase();
         db.delete(Constants.TABLE_NAME, "_id=?", new String[]{currentRecordID});

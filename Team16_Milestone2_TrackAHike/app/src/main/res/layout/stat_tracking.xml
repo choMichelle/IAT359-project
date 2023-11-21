@@ -11,67 +11,105 @@
         android:text="Current Session"
         android:gravity="center"/>
 
-    <EditText
-        android:id="@+id/currentSessionNameEdit"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Name the session"
-        android:textAlignment="center"
-        android:layout_gravity="center"/>
-
-    <EditText
-        android:id="@+id/currentSessionCategoryEdit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="Add session to a group via name"
-        android:textSize="14sp"
-        android:textAlignment="center"
-        android:layout_gravity="center"/>
-
-    <TextView
-        android:id="@+id/timeTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="0:0:0"
-        android:textSize="24sp"
-        android:layout_gravity="center"/>
-
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Current stats:"
-        android:textSize="16sp" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center">
+        android:orientation="vertical"
+        android:layout_weight="2">
 
-        <TextView
-            android:id="@+id/stepsTextView"
+        <EditText
+            android:id="@+id/currentSessionNameEdit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Name the session"
+            android:textAlignment="center"
+            android:layout_gravity="center"/>
+
+        <EditText
+            android:id="@+id/currentSessionCategoryEdit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="0"
-            android:textSize="20sp"/>
+            android:hint="Add session to a group via name"
+            android:textSize="14sp"
+            android:textAlignment="center"
+            android:layout_gravity="center"/>
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/timeTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=" steps"
-            android:textSize="20sp"/>
+            android:text="0:0:0"
+            android:textSize="24sp"
+            android:layout_gravity="center"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"/>
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Current stats:"
+            android:textSize="16sp"
+            android:layout_marginBottom="15dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/stepsTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textSize="20sp"/>
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" steps"
+                android:textSize="20sp"/>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/startButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:onClick="startTracking"
+            android:text="Start tracking"
+            android:layout_marginTop="15dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="15dp">
+
+            <Button
+                android:id="@+id/pauseButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pause" />
+
+            <Button
+                android:id="@+id/saveButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Save" />
+
+            <Button
+                android:id="@+id/resetButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Reset" />
+        </LinearLayout>
+
     </LinearLayout>
 
-    <Button
-        android:id="@+id/startButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:onClick="startTracking"
-        android:text="Start tracking" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -79,22 +117,24 @@
         android:gravity="center">
 
         <Button
-            android:id="@+id/pauseButton"
+            android:id="@+id/settingsButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Pause" />
+            android:onClick="gotoSettings"
+            android:text="Settings" />
+        <Button
+            android:id="@+id/homeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="gotoHome"
+            android:text="Home" />
 
         <Button
-            android:id="@+id/saveButton"
+            android:id="@+id/allRecButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Save" />
-
-        <Button
-            android:id="@+id/resetButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Reset" />
+            android:onClick="gotoRecords"
+            android:text="All records" />
     </LinearLayout>
 
 </LinearLayout>

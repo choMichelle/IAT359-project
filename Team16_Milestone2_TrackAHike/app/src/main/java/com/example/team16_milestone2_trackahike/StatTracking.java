@@ -2,6 +2,7 @@ package com.example.team16_milestone2_trackahike;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -23,20 +24,21 @@ import androidx.core.content.ContextCompat;
 
 import java.util.Locale;
 
+//starts, pauses, and saves tracking data
 public class StatTracking extends Activity implements View.OnClickListener, SensorEventListener {
 
     private int seconds = 0;
-    private int totalSteps, previousSteps;
+    private int totalSteps;
     private boolean isRunning = false;
     private boolean wasRunning = false;
     private boolean recordStarted = false;
     private TextView timeText, stepsText;
     private Button startBtn, pauseBtn, saveBtn, resetBtn;
+    private Button deleteButton, settingsButton, dashboardButton, allRecordsButton;
     private EditText sessionName, sessionCategory;
     private SensorManager mSensorManager;
     private Sensor mStepCounter;
     private MyDatabase db;
-    Context context;
 
     private int REQUEST_CODE_PERMISSIONS = 1001;
     private final String[] REQUIRED_PERMISSIONS = new String[]{"android.permission.ACTIVITY_RECOGNITION"};
@@ -46,13 +48,24 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
         super.onCreate(savedInstanceState);
         setContentView(R.layout.stat_tracking);
 
+        //move between activities buttons
+        settingsButton = (Button) findViewById(R.id.settingsButton);
+        dashboardButton = (Button) findViewById(R.id.homeButton);
+        allRecordsButton = (Button) findViewById(R.id.allRecButton);
+
+        settingsButton.setOnClickListener(this::gotoSettings);
+        dashboardButton.setOnClickListener(this::gotoHome);
+        allRecordsButton.setOnClickListener(this::gotoRecords);
+
         db = new MyDatabase(this);
 
+        //stat tracking views
         timeText = (TextView) findViewById(R.id.timeTextView);
         stepsText = (TextView) findViewById(R.id.stepsTextView);
         sessionName = (EditText) findViewById(R.id.currentSessionNameEdit);
         sessionCategory = (EditText) findViewById(R.id.currentSessionCategoryEdit);
 
+        //stat tracking buttons
         startBtn = (Button) findViewById(R.id.startButton);
         pauseBtn = (Button) findViewById(R.id.pauseButton);
         saveBtn = (Button) findViewById(R.id.saveButton);
@@ -63,6 +76,7 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
         saveBtn.setOnClickListener(this::saveSession);
         resetBtn.setOnClickListener(this::resetTracking);
 
+        //get step detector
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         if (mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR) != null) {
             mStepCounter = mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
@@ -79,10 +93,12 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
             sessionCategory.setText(savedInstanceState.getString("category"));
             recordStarted = savedInstanceState.getBoolean("recordStarted");
 
+            //format and set text for timer
             int hrs = seconds / 3600;
             int mins = (seconds % 3600) / 60;
             int secs = seconds % 60;
             timeText.setText(hrs + ":" + mins + ":" + secs);
+
             stepsText.setText(String.valueOf(totalSteps));
         }
 
@@ -111,6 +127,8 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
     protected void onPause() {
         super.onPause();
         mSensorManager.unregisterListener(this);
+
+        //set tracking state (used to keep tracking if device orientation is changed)
         wasRunning = isRunning;
         isRunning = false;
     }
@@ -119,20 +137,26 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
     protected void onResume() {
         super.onResume();
         mSensorManager.registerListener(this, mStepCounter, mSensorManager.SENSOR_DELAY_UI);
+
+        //start tracking stats again (used to keep tracking if device orientation is changed)
         if (wasRunning) {
             startTiming(startBtn);
             isRunning = true;
         }
+
+        //set start button text if tracking was started then paused
         if (recordStarted && !wasRunning) {
             startBtn.setText("Resume tracking");
         }
     }
 
+    //on pause button press
     private void pauseTracking(View view) {
         isRunning = false;
         startBtn.setText("Resume tracking");
     }
 
+    //on save button press, save session stats and details
     private void saveSession(View view) {
         String name = sessionName.getText().toString();
         String time = String.valueOf(seconds);
@@ -143,7 +167,7 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
             Toast.makeText(this, "Session not named. Please set a name.", Toast.LENGTH_SHORT).show();
         }
         else if (!name.equals("") && category.equals("")){
-            category = "no group";
+            category = "no group"; //set group name to a default value if not set
 
             long id = db.insertData(name, time, steps, category);
             if (id < 0)
@@ -180,34 +204,41 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
         startBtn.setText("Start tracking");
     }
 
+    //run timer, format and set current time
     public void countTime() {
 
         while (isRunning) {
             int hrs = seconds / 3600;
             int mins = (seconds % 3600) / 60;
             int secs = seconds % 60;
+
+            //update timer text on UI thread
             this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     timeText.setText(hrs + ":" + mins + ":" + secs);
                 }
             });
+
+            //update timer every second
             SystemClock.sleep(1000);
             seconds++;
         }
 
     }
 
+    //on start tracking button press, start tracking
     public void startTiming(View view) {
         if (!isRunning) {
             Thread timerThread = new Thread(new timeTrackingThread());
             isRunning = true;
-            timerThread.start();
+            timerThread.start(); //start separate thread for timer
             startBtn.setText("Tracking...");
             recordStarted = true;
         }
     }
 
+    //separate thread to handle time tracking function
     private class timeTrackingThread implements Runnable {
         @Override
         public void run() {
@@ -218,10 +249,10 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
     @Override
     public void onSensorChanged(SensorEvent event) {
 
+        //get step detector values while tracking, update text
         if (isRunning) {
             int currStep = (int) event.values[0];
             totalSteps += currStep;
-            Log.i("steps count: ", String.valueOf(totalSteps));
             stepsText.setText(String.valueOf(totalSteps));
         }
 
@@ -237,6 +268,7 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
 
     }
 
+    //check if required permissions are granted, return boolean
     private boolean allPermissionsGranted() {
 
         for (String permission : REQUIRED_PERMISSIONS) {
@@ -245,5 +277,20 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
             }
         }
         return true;
+    }
+
+    public void gotoSettings(View view){
+        Intent i = new Intent(this, Settings.class);
+        startActivity(i);
+    }
+
+    public void gotoHome(View view) {
+        Intent i = new Intent(this, UserDashboard.class);
+        startActivity(i);
+    }
+
+    public void gotoRecords(View view) {
+        Intent i = new Intent(this, AllRecords.class);
+        startActivity(i);
     }
 }

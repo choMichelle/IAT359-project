@@ -13,12 +13,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+//handle populating recycler view with items
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHolder> {
 
     public ArrayList<String> list;
 
     public CustomAdapter(ArrayList<String> list) { this.list = list; }
 
+    //inflate recycler view with layout from row.xml
     @Override
     public CustomAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.row, parent, false);
@@ -26,6 +28,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         return viewHolder;
     }
 
+    //get items from the dataset and set text
     @Override
     public void onBindViewHolder(CustomAdapter.MyViewHolder holder, int position) {
         String item = list.get(position).toString();
@@ -51,6 +54,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
             context = itemView.getContext();
         }
 
+        //redirect to specific record activity on clicking a record
         @Override
         public void onClick(View view) {
             Intent i = new Intent(context, SpecificRecord.class);

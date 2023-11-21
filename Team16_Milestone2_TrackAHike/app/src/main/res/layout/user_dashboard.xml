@@ -63,14 +63,6 @@
             android:layout_height="wrap_content"
             android:onClick="gotoSettings"
             android:text="Settings" />
-        <Button
-            android:id="@+id/homeButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="gotoHome"
-            android:text="Home" />
-
-
 
         <Button
             android:id="@+id/allRecButton"

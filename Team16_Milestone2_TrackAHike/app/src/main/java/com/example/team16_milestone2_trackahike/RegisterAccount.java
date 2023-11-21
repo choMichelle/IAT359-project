@@ -27,6 +27,7 @@ public class RegisterAccount extends Activity implements View.OnClickListener {
         registerButton.setOnClickListener(this);
     }
 
+    //save username and password to sharedPrefs
     @Override
     public void onClick(View view) {
         SharedPreferences sharedPrefs = getSharedPreferences("MyData", Context.MODE_PRIVATE);
@@ -36,6 +37,7 @@ public class RegisterAccount extends Activity implements View.OnClickListener {
         Toast.makeText(this, "Username and password saved to Preferences", Toast.LENGTH_SHORT).show();
         editor.commit();
 
+        //redirect to login activity
         Intent i = new Intent(this, LoginAccount.class);
         startActivity(i);
     }

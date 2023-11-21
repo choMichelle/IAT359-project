@@ -9,7 +9,6 @@ import android.os.Bundle;
 //first activity - no UI
 //checks if there is username/password data saved in sharedpreferences
 //redirects app to RegisterAccount activity if no data
-//RICKYTESTINGoh
 //redirects app to LoginAccount Activity if there is data
 public class AccountChecker extends Activity {
     public static final String DEFAULT = "No account data";
@@ -18,12 +17,14 @@ public class AccountChecker extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //get username and password from sharedPrefs
         SharedPreferences sharedPrefs = getSharedPreferences("MyData", Context.MODE_PRIVATE);
         String username = sharedPrefs.getString("username", DEFAULT);
         String password = sharedPrefs.getString("password", DEFAULT);
 
         Intent i;
 
+        //check if username and password data exists
         if (username.equals(DEFAULT)||password.equals(DEFAULT))
         {
             i = new Intent(this, RegisterAccount.class);

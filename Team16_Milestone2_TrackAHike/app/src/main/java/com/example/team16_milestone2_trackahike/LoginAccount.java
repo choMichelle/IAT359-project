@@ -30,17 +30,22 @@ public class LoginAccount extends Activity implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
+        //get username and password from savedPrefs
         SharedPreferences sharedPrefs = getSharedPreferences("MyData", Context.MODE_PRIVATE);
         String savedUsername = sharedPrefs.getString("username", DEFAULT);
         String savedPassword = sharedPrefs.getString("password", DEFAULT);
 
+        //check if the username and password inputs match the saved data
         if (enteredUsername.getText().toString().equals(savedUsername) &&
                 enteredPassword.getText().toString().equals(savedPassword)) {
+            //redirect to dashboard
             Intent i = new Intent(this, UserDashboard.class);
             startActivity(i);
         }
         else {
             Toast.makeText(this, "Username or password incorrect", Toast.LENGTH_SHORT).show();
+
+            //redirect to register new profile
             Intent i = new Intent(this, RegisterAccount.class);
             startActivity(i);
         }

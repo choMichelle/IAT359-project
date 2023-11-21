@@ -33,6 +33,7 @@ public class UserDashboard extends AppCompatActivity implements View.OnClickList
 
         SharedPreferences sharedPrefs = getSharedPreferences("MyData", Context.MODE_PRIVATE);
         String welcomeText = sharedPrefs.getString("name", DEFAULT);
+        String savedHeight = sharedPrefs.getString("height", DEFAULT);
 
 
 

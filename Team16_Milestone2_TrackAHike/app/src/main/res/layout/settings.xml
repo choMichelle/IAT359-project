@@ -69,6 +69,7 @@
                     android:hint="Change Age" />
 
             </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/genderLayout"
                 android:layout_width="match_parent"
@@ -91,6 +92,8 @@
                     android:hint="Change Gender" />
 
             </LinearLayout>
+
+
             <LinearLayout
                 android:id="@+id/heightLayout"
                 android:layout_width="match_parent"
@@ -113,6 +116,8 @@
                     android:hint="Change Height in cm" />
 
             </LinearLayout>
+
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -132,31 +137,48 @@
             </LinearLayout>
 
 
-            =
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:orientation="horizontal"
                 android:paddingBottom="20dp">
-
                 <Button
                     android:id="@+id/StartCamera"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="Add Photos to Gallery" />
+                    android:text="Change Profile Picture" />
+
+
 
             </LinearLayout>
-            <TextView
-                android:id="@+id/textView8"
-                android:layout_width="wrap_content"
-                android:layout_height="25dp"
 
-                android:text="Gallery" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="283dp"
+                android:gravity="center"
+                android:paddingBottom="10dp">
+
+
+                <ImageView
+                    android:id="@+id/imageViewCapturedImg"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="40dp"
+                    android:layout_weight="1" />
+
+
+            </LinearLayout>
+
+
         </LinearLayout>
+
+
+
     </ScrollView>
 
 
 </LinearLayout>
+
+

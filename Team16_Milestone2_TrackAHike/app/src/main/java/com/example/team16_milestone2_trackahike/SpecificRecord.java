@@ -4,10 +4,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,8 +17,11 @@ import android.widget.Toast;
 public class SpecificRecord extends Activity implements View.OnClickListener {
     private TextView recordNameText, recordedTimeText, recordedStepsText, recordedCategoryText,
             recordedDistanceText;
-    private String recordID;
+    private String recordID; //holds UID of record being viewed
     private Button deleteButton, settingsButton, dashboardButton, allRecordsButton;
+    private ImageView imgView0, imgView1, imgView2,
+            imgView3, imgView4, imgView5; //views to display saved photos
+    private ImageView[] imgViews; //holds all imageviews for easy retrieval
     private MyDatabase db;
     private MyHelper helper;
 
@@ -42,6 +47,17 @@ public class SpecificRecord extends Activity implements View.OnClickListener {
         recordedTimeText = (TextView) findViewById(R.id.recordedTimeText);
         recordedStepsText = (TextView) findViewById(R.id.recordedStepsText);
         recordedCategoryText = (TextView) findViewById(R.id.recordedCategoryText);
+
+        //get views to display photos
+        imgView0 = (ImageView) findViewById(R.id.photoGalleryView0);
+        imgView1 = (ImageView) findViewById(R.id.photoGalleryView1);
+        imgView2 = (ImageView) findViewById(R.id.photoGalleryView2);
+        imgView3 = (ImageView) findViewById(R.id.photoGalleryView3);
+        imgView4 = (ImageView) findViewById(R.id.photoGalleryView4);
+        imgView5 = (ImageView) findViewById(R.id.photoGalleryView5);
+
+        //add each image view to an array
+        imgViews = new ImageView[]{imgView0, imgView1, imgView2, imgView3, imgView4, imgView5};
 
         Bundle extras = getIntent().getExtras();
 
@@ -85,6 +101,25 @@ public class SpecificRecord extends Activity implements View.OnClickListener {
                     }
                     catch (NumberFormatException e){
                         Log.e("Parse time int: ", "could not parse error: " + e);
+                    }
+
+                    Cursor photoCursor = db.getPhotos(recordID);
+                    int photoBytesIndex = photoCursor.getColumnIndex(Constants.PHOTO_CONTENT);
+                    int photoCount = 0; //counts the photos, used to decide which imageView to use
+                    photoCursor.moveToFirst();
+                    while (!photoCursor.isAfterLast()) {
+                        byte[] photoBytes = photoCursor.getBlob(photoBytesIndex); //get photo byte array
+                        Bitmap photoBitmap = Utility.toBitmap(photoBytes); //convert byte array to bitmap;
+                        ImageView currentView = imgViews[photoCount]; //get an imageView
+                        currentView.setImageBitmap(photoBitmap);
+                        photoCount++;
+                        photoCursor.moveToNext();
+                    }
+                    if (photoCount < 6) { //if the number of photos to display < number of imageViews
+                        for (int i = photoCount; i < 6; i++) { //loop through empty imageViews
+                            ImageView currView = imgViews[i]; //get the current imageView
+                            currView.setVisibility(View.GONE); //get rid of the imageView
+                        }
                     }
 
                     break;

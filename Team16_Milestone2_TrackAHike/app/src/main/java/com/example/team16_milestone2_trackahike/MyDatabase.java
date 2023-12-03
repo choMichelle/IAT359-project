@@ -20,7 +20,7 @@ public class MyDatabase {
 
     }
 
-    //add record into db
+    //add record into db (records table)
     public long insertData(String name, String seconds, String steps, String category) {
         db = helper.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -32,7 +32,17 @@ public class MyDatabase {
         return id;
     }
 
-    //get cursor for all data
+    //add photos into db (photos table)
+    public long insertPhotos(byte[] photo, String recordID) {
+        db = helper.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(Constants.PHOTO_CONTENT, photo);
+        contentValues.put(Constants.RECORD_ID, recordID);
+        long photoID = db.insert(Constants.PHOTOS_TABLE_NAME, null, contentValues);
+        return photoID;
+    }
+
+    //get cursor for all exercise session data
     public Cursor getData() {
         SQLiteDatabase db = helper.getWritableDatabase();
         String[] columns = {Constants.UID, Constants.NAME, Constants.TIME, Constants.STEPS, Constants.CATEGORY};
@@ -40,7 +50,7 @@ public class MyDatabase {
         return cursor;
     }
 
-    //return filtered records
+    //return filtered exercise records
     public ArrayList<String> getFilteredData(String category) {
         SQLiteDatabase db = helper.getWritableDatabase();
         String[] columns = {Constants.NAME, Constants.TIME, Constants.STEPS, Constants.CATEGORY};
@@ -48,7 +58,6 @@ public class MyDatabase {
         String selection = Constants.CATEGORY + "='" + category + "'";
         Cursor cursor = db.query(Constants.TABLE_NAME, columns, selection, null, null, null, null);
 
-        StringBuffer buffer = new StringBuffer();
         ArrayList<String> filteredResults = new ArrayList<String>();
 
         cursor.moveToLast();
@@ -59,6 +68,16 @@ public class MyDatabase {
             cursor.moveToPrevious();
         }
         return filteredResults;
+    }
+
+    public Cursor getPhotos(String recordID) {
+        SQLiteDatabase db = helper.getWritableDatabase();
+        String[] columns = {Constants.PHOTO_CONTENT, Constants.RECORD_ID};
+
+        String selection = Constants.RECORD_ID + "='" + recordID + "'";
+        Cursor cursor = db.query(Constants.PHOTOS_TABLE_NAME, columns, selection, null, null, null, null);
+
+        return cursor;
     }
 
     //delete selected record from db

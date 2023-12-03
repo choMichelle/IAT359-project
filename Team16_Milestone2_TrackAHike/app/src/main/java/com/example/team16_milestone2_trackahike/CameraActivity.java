@@ -42,7 +42,6 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
 
     private static final int img_id = 1;
 
-    // new
     private Executor executor = Executors.newSingleThreadExecutor();
     private int REQUEST_CODE_PERMISSIONS = 1001;
     private final String[] REQUIRED_PERMISSIONS = new String[]{"android.permission.CAMERA"};
@@ -52,12 +51,12 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
 
-        //buttonCaptureSave = findViewById(R.id.buttonCaptureSave);
+
         buttonCaptureShow = findViewById(R.id.buttonCaptureShow);
-        //previewView = findViewById(R.id.previewView);
+
         imageViewCaptured = findViewById(R.id.imageViewCapturedImg);
 
-        buttonCaptureSave.setOnClickListener(this);
+
         buttonCaptureShow.setOnClickListener(this);
 
 

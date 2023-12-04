@@ -71,19 +71,7 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
             Other.setChecked(true);
         }
 
-
-        if (genderSP==0&&heightNumber<162){
-            stride = 26;
-        } else if (genderSP==0&&heightNumber>162) {
-            stride = 28;
-        }else if (genderSP==1||genderSP==3 &&heightNumber<175) {
-            stride = 28;
-        }else if (genderSP==1||genderSP==3 &&heightNumber>175) {
-            stride = 30;
-        }
-
-
-
+        
 
     }
 

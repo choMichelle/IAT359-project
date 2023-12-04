@@ -37,13 +37,16 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
     //variables to hold/track stats
     private int seconds = 0; //holds recorded time in seconds
     private int totalSteps; //holds number of steps taken
+    private float totalDistance; //holds distance travelled (calculated)
+    private float caloriesBurned; //holds calories burned (calculated)
+    private float moveSpeed; //holds movement speed (calculated)
 
     //variables to control/track when the tracker is running
     private boolean isRunning = false; //checks if the tracker is currently active
     private boolean wasRunning = false; //checks if the tracker was previously active
     private boolean recordStarted = false; //checks if the tracker was started once after activity was opened
 
-    private TextView timeText, stepsText; //views to display tracked stats
+    private TextView timeText, stepsText, distanceText, caloriesText, speedText; //views to display tracked stats
     private ImageView imgView0, imgView1, imgView2,
                     imgView3, imgView4, imgView5; //views to hold captured photos
     private ImageView[] imgViews; //holds all imageviews for easy retrieval
@@ -85,10 +88,13 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
         allRecordsButton.setOnClickListener(this::gotoRecords);
 
         //get stat tracking views
-        timeText = (TextView) findViewById(R.id.timeTextView);
-        stepsText = (TextView) findViewById(R.id.stepsTextView);
         sessionName = (EditText) findViewById(R.id.currentSessionNameEdit);
         sessionCategory = (EditText) findViewById(R.id.currentSessionCategoryEdit);
+        timeText = (TextView) findViewById(R.id.timeTextView);
+        stepsText = (TextView) findViewById(R.id.stepsTextView);
+        distanceText = (TextView) findViewById(R.id.distanceTextView);
+        caloriesText = (TextView) findViewById(R.id.caloriesTextView);
+        speedText = (TextView) findViewById(R.id.speedTextView);
 
         //get stat tracking buttons
         startBtn = (Button) findViewById(R.id.startButton);
@@ -131,12 +137,20 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
         if (savedInstanceState != null) {
 
             //get and set the state of the activity prior to the activity being destroyed
+            //set name, group name text
             sessionName.setText(savedInstanceState.getString("name"));
+            sessionCategory.setText(savedInstanceState.getString("category"));
+
+            //set stats variables
             seconds = savedInstanceState.getInt("seconds");
+            totalSteps = savedInstanceState.getInt("steps");
+            totalDistance = savedInstanceState.getFloat("distance");
+            caloriesBurned = savedInstanceState.getFloat("calories");
+            moveSpeed = savedInstanceState.getFloat("speed");
+
+            //set tracker state variables
             isRunning = savedInstanceState.getBoolean("running");
             wasRunning = savedInstanceState.getBoolean("wasRunning");
-            totalSteps = savedInstanceState.getInt("steps");
-            sessionCategory.setText(savedInstanceState.getString("category"));
             recordStarted = savedInstanceState.getBoolean("recordStarted");
 
             //format and set text for timer
@@ -147,6 +161,15 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
 
             //set text for the number of steps taken
             stepsText.setText(String.valueOf(totalSteps));
+
+            //set text for distance travelled
+            distanceText.setText(totalDistance + " km");
+
+            //set text for calories burned
+            caloriesText.setText(caloriesBurned + " kcal");
+
+            //set text for speed
+            speedText.setText(moveSpeed + " km/s");
         }
 
         //check if required permissions are granted
@@ -161,19 +184,27 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
+        //save name, group name
         savedInstanceState.putString("name", sessionName.getText().toString());
+        savedInstanceState.putString("category", sessionCategory.getText().toString());
+
+        //save stats values
         savedInstanceState.putInt("seconds", seconds);
+        savedInstanceState.putInt("steps", totalSteps);
+        savedInstanceState.putFloat("distance", totalDistance);
+        savedInstanceState.putFloat("calories", caloriesBurned);
+        savedInstanceState.putFloat("speed", moveSpeed);
+
+        //save tracker state variables
         savedInstanceState.putBoolean("running", isRunning);
         savedInstanceState.putBoolean("wasRunning", wasRunning);
-        savedInstanceState.putInt("steps", totalSteps);
-        savedInstanceState.putString("category", sessionCategory.getText().toString());
         savedInstanceState.putBoolean("recordStarted", recordStarted);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        mSensorManager.unregisterListener(this);
+        mSensorManager.unregisterListener(this); //unregister step detector
 
         //set tracking state (used to keep tracking if device orientation is changed)
         wasRunning = isRunning;
@@ -183,6 +214,8 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
     @Override
     protected void onResume() {
         super.onResume();
+
+        //register step detector
         mSensorManager.registerListener(this, mStepCounter, mSensorManager.SENSOR_DELAY_UI);
 
         //start tracking stats again (used to keep tracking if device orientation is changed)
@@ -207,9 +240,12 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
     private void saveSession(View view) {
         //get the variables to save
         String name = sessionName.getText().toString(); //name of session
+        String category = sessionCategory.getText().toString(); //group name
         String time = String.valueOf(seconds); //time in seconds
         String steps = String.valueOf(totalSteps); //steps taken
-        String category = sessionCategory.getText().toString(); //group name
+        String distance = String.valueOf(totalDistance); //distance travelled (calculated)
+        String calories = String.valueOf(caloriesBurned); //calories burned (calculated)
+        String speed = String.valueOf(moveSpeed); //movement speed (calculated)
 
         //boolean to check if data can be saved
         boolean canSave;
@@ -229,7 +265,7 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
 
         //save data
         if (canSave) {
-            long recordID = db.insertData(name, time, steps, category); //save stats data to db, records table
+            long recordID = db.insertData(name, time, steps, distance, calories, speed, category); //save stats data to db, records table
 
             if (img_id > 0) { //check if a photo has been taken (ex. img_id would =1 if 1 photo has been taken)
                 for (int i = 0; i < img_id; i++) { //loop through all photos to be saved
@@ -264,15 +300,30 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
     }
 
     private void resetTracking(View view) {
+        //reset name, group name text
         sessionName.setText("");
         sessionCategory.setText("");
+
+        //reset stats variables and text
         seconds = 0;
         timeText.setText("0:0:0");
         totalSteps = 0;
         stepsText.setText("0");
+        totalDistance = 0;
+        distanceText.setText("0 km");
+        caloriesBurned = 0;
+        caloriesText.setText("0 kcal");
+        moveSpeed = 0;
+        speedText.setText("0 km/s");
+
+        //reset tracker state variables
         isRunning = false;
         recordStarted = false;
+
+        //reset start button text
         startBtn.setText("Start tracking");
+
+        //reset photo id
         img_id = 0;
 
         //loop through all image views and replace with placeholders

@@ -2,15 +2,21 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@drawable/bg">
 
     <TextView
         android:id="@+id/textView9"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
-        android:text="Current Session"
-        android:textSize="16sp"/>
+        android:background="@drawable/pagetitle"
+        android:gravity="start|center_vertical"
+        android:textColor="@color/white"
+        android:text="Current session"
+        android:textSize="24sp"
+        android:paddingLeft="20dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"/>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -20,78 +26,216 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginTop="20dp">
 
             <EditText
                 android:id="@+id/currentSessionNameEdit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/track_edittextbg"
                 android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="20dp"
                 android:hint="Name the session"
-                android:textAlignment="center" />
+                android:textColorHint="@color/white"
+                android:textSize="18sp"
+                android:textColor="@color/white"
+                android:textAlignment="center"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"/>
 
             <EditText
                 android:id="@+id/currentSessionCategoryEdit"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/track_edittextbg_group"
                 android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="20dp"
                 android:hint="Add session to a group via name"
+                android:textColorHint="@color/white"
                 android:textAlignment="center"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:textColor="@color/white"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"/>
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/pagesubtitle"
+                android:gravity="start|center_vertical"
+                android:layout_marginBottom="20dp"
+                android:paddingLeft="20dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:text="Current stats:"
+                android:textSize="16sp"
+                android:textColor="@color/white" />
 
             <TextView
                 android:id="@+id/timeTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/onerec_statbg"
                 android:layout_gravity="center"
-                android:layout_marginTop="15dp"
+                android:gravity="center"
                 android:layout_marginBottom="15dp"
                 android:text="0:0:0"
-                android:textSize="24sp" />
-
-            <TextView
-                android:id="@+id/textView6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:text="Current stats:"
-                android:textSize="16sp" />
+                android:textSize="24sp"
+                android:textColor="@color/white"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal"
                 android:gravity="center"
-                android:orientation="horizontal">
+                android:layout_marginBottom="20dp">
 
-                <TextView
-                    android:id="@+id/stepsTextView"
+                <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="0"
-                    android:textSize="20sp" />
+                    android:layout_height="match_parent"
+                    android:background="@drawable/onerec_statbg"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginRight="30dp"
+                    android:gravity="center">
 
-                <TextView
-                    android:id="@+id/textView"
+                    <TextView
+                        android:id="@+id/textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Steps taken"
+                        android:textSize="14sp"
+                        android:textColor="@color/white"/>
+
+                    <TextView
+                        android:id="@+id/stepsTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="0"
+                        android:textSize="20sp"
+                        android:textColor="@color/white"/>
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=" steps"
-                    android:textSize="20sp" />
+                    android:layout_height="match_parent"
+                    android:background="@drawable/onerec_statbg"
+                    android:orientation="vertical"
+                    android:layout_marginRight="30dp"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/textView2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Distance travelled"
+                        android:textSize="14sp"
+                        android:textColor="@color/white"/>
+
+                    <TextView
+                        android:id="@+id/distanceTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="0 km"
+                        android:textSize="20sp"
+                        android:textColor="@color/white"/>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginBottom="20dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/onerec_statbg"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginRight="30dp"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/textView3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Calories burned"
+                        android:textSize="14sp"
+                        android:textColor="@color/white"/>
+
+                    <TextView
+                        android:id="@+id/caloriesTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="0 kcal"
+                        android:textSize="20sp"
+                        android:textColor="@color/white"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/onerec_statbg"
+                    android:orientation="vertical"
+                    android:layout_marginRight="30dp"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/textView4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Speed"
+                        android:textSize="14sp"
+                        android:textColor="@color/white"/>
+
+                    <TextView
+                        android:id="@+id/speedTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="0 km/s"
+                        android:textSize="20sp"
+                        android:textColor="@color/white"/>
+
+                </LinearLayout>
             </LinearLayout>
 
             <Button
                 android:id="@+id/startButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/button"
                 android:layout_gravity="center"
-                android:layout_marginTop="15dp"
                 android:onClick="startTracking"
-                android:text="Start tracking" />
+                android:text="Start tracking"
+                android:textSize="14sp"
+                android:textColor="@color/white"
+                android:padding="10dp"
+                android:layout_marginBottom="20dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="15dp"
+                android:layout_marginBottom="20dp"
                 android:gravity="center"
                 android:orientation="horizontal">
 
@@ -99,26 +243,41 @@
                     android:id="@+id/pauseButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Pause" />
+                    android:background="@drawable/button"
+                    android:layout_marginRight="5dp"
+                    android:text="Pause"
+                    android:textSize="14sp"
+                    android:textColor="@color/white"
+                    android:padding="10dp"/>
 
                 <Button
                     android:id="@+id/saveButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Save" />
+                    android:background="@drawable/button"
+                    android:layout_marginRight="5dp"
+                    android:text="Save"
+                    android:textSize="14sp"
+                    android:textColor="@color/white"
+                    android:padding="10dp"/>
 
                 <Button
                     android:id="@+id/resetButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Reset" />
+                    android:background="@drawable/button"
+                    android:text="Reset"
+                    android:textSize="14sp"
+                    android:textColor="@color/white"
+                    android:padding="10dp"/>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
-                android:layout_marginBottom="15dp">
+                android:background="@drawable/pagesubtitle"
+                android:layout_marginBottom="20dp">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -130,15 +289,22 @@
                         android:id="@+id/textView7"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-
+                        android:gravity="start|center_vertical"
+                        android:paddingLeft="20dp"
+                        android:paddingTop="10dp"
                         android:text="This session's photos:"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        android:textColor="@color/white"/>
                     <TextView
                         android:id="@+id/textView8"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:gravity="start|center_vertical"
+                        android:paddingLeft="20dp"
+                        android:paddingBottom="10dp"
                         android:text="(Tracking will pause while taking a photo)"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:textColor="@color/white"/>
 
                 </LinearLayout>
 
@@ -146,69 +312,83 @@
                     android:id="@+id/cameraButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/button"
+                    android:padding="10dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_gravity="center"
                     android:text="Take photo" />
 
             </LinearLayout>
 
-            <TableLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_marginBottom="20dp">
 
-                <TableRow
+                <ImageView
+                    android:id="@+id/imageView0"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="200dp"
+                    android:layout_marginLeft="35dp"
+                    android:layout_marginRight="35dp"
+                    android:layout_marginBottom="20dp"
+                    android:layout_weight="1"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/doge" />
 
-                    <ImageView
-                        android:id="@+id/imageView0"
-                        android:layout_width="wrap_content"
-                        android:layout_height="150dp"
-                        android:layout_weight="1"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/doge" />
-
-                    <ImageView
-                        android:id="@+id/imageView1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="150dp"
-                        android:layout_weight="1"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/doge" />
-                    <ImageView
-                        android:id="@+id/imageView2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="150dp"
-                        android:layout_weight="1"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/doge" />
-                </TableRow>
-
-                <TableRow
+                <ImageView
+                    android:id="@+id/imageView1"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="200dp"
+                    android:layout_marginLeft="35dp"
+                    android:layout_marginRight="35dp"
+                    android:layout_marginBottom="20dp"
+                    android:layout_weight="1"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/doge" />
+                <ImageView
+                    android:id="@+id/imageView2"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_marginLeft="35dp"
+                    android:layout_marginRight="35dp"
+                    android:layout_marginBottom="20dp"
+                    android:layout_weight="1"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/doge" />
 
-                    <ImageView
-                        android:id="@+id/imageView3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="150dp"
-                        android:layout_weight="1"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/doge" />
-                    <ImageView
-                        android:id="@+id/imageView4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="150dp"
-                        android:layout_weight="1"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/doge" />
-                    <ImageView
-                        android:id="@+id/imageView5"
-                        android:layout_width="wrap_content"
-                        android:layout_height="150dp"
-                        android:layout_weight="1"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/doge" />
-                </TableRow>
-            </TableLayout>
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_marginLeft="35dp"
+                    android:layout_marginRight="35dp"
+                    android:layout_marginBottom="20dp"
+                    android:layout_weight="1"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/doge" />
+                <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_marginLeft="35dp"
+                    android:layout_marginRight="35dp"
+                    android:layout_marginBottom="20dp"
+                    android:layout_weight="1"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/doge" />
+                <ImageView
+                    android:id="@+id/imageView5"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_marginLeft="35dp"
+                    android:layout_marginRight="35dp"
+                    android:layout_marginBottom="20dp"
+                    android:layout_weight="1"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/doge" />
+            </LinearLayout>
 
         </LinearLayout>
     </ScrollView>
@@ -216,6 +396,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/bottombar"
         android:orientation="horizontal"
         android:gravity="center">
 
@@ -223,21 +404,37 @@
             android:id="@+id/settingsButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/button"
+            android:padding="10dp"
+            android:layout_marginRight="5dp"
             android:onClick="gotoSettings"
-            android:text="Settings" />
+            android:text="Settings"
+            android:textSize="14sp"
+            android:textColor="@color/white"/>
+
         <Button
             android:id="@+id/homeButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/button"
+            android:padding="10dp"
+            android:layout_marginRight="5dp"
             android:onClick="gotoHome"
-            android:text="Home" />
+            android:text="Home"
+            android:textSize="14sp"
+            android:textColor="@color/white"/>
 
         <Button
             android:id="@+id/allRecButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/button"
+            android:padding="10dp"
             android:onClick="gotoRecords"
-            android:text="All records" />
+            android:text="All records"
+            android:textSize="14sp"
+            android:textColor="@color/white"/>
+
     </LinearLayout>
 
 </LinearLayout>

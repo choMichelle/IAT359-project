@@ -27,11 +27,11 @@ public class AccountChecker extends Activity {
         //check if username and password data exists
         if (username.equals(DEFAULT)||password.equals(DEFAULT))
         {
-            i = new Intent(this, RegisterAccount.class);
+            i = new Intent(this, RegisterAccount.class); //redirect to register, if no data
         }
         else
         {
-            i = new Intent(this, LoginAccount.class);
+            i = new Intent(this, LoginAccount.class); //redirect to login, if data present
         }
         startActivity(i);
         finish(); //close this activity

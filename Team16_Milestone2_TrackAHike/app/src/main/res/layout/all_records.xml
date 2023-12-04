@@ -2,33 +2,51 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg"
     android:orientation="vertical">
 
     <TextView
         android:id="@+id/textView16"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/pagetitle"
         android:text="Your Records"
-        android:textSize="24sp" />
+        android:textSize="24sp"
+        android:textColor="@color/white"
+        android:gravity="start|center_vertical"
+        android:paddingLeft="20dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="right">
+        android:gravity="right"
+        android:layout_marginTop="20dp">
 
         <EditText
             android:id="@+id/filterEntry"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@drawable/filter_textbg"
+            android:layout_weight="1"
             android:hint="Filter by group name"
-            android:textSize="14sp"/>
+            android:textColorHint="@color/white"
+            android:paddingRight="10dp"
+            android:textAlignment="viewEnd"
+            android:textSize="14sp"
+            android:textColor="@color/white"/>
 
         <Button
             android:id="@+id/button2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/button_filter"
+            android:layout_marginRight="20dp"
+            android:padding="10dp"
             android:text="Filter"
+            android:textSize="14sp"
             android:onClick="filterRecords"/>
     </LinearLayout>
 
@@ -36,11 +54,15 @@
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="35dp"
+        android:layout_marginRight="35dp"
         android:layout_weight="2"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/bottombar"
         android:orientation="horizontal"
         android:gravity="center">
 
@@ -48,20 +70,34 @@
             android:id="@+id/settingsButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/button"
+            android:padding="10dp"
+            android:layout_marginRight="5dp"
             android:onClick="gotoSettings"
-            android:text="Settings" />
+            android:text="Settings"
+            android:textSize="14sp"
+            android:textColor="@color/white"/>
         <Button
             android:id="@+id/homeButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/button"
+            android:padding="10dp"
+            android:layout_marginRight="5dp"
             android:onClick="gotoHome"
-            android:text="Home" />
+            android:text="Home"
+            android:textSize="14sp"
+            android:textColor="@color/white"/>
         <Button
             android:id="@+id/trackButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/button"
+            android:padding="10dp"
             android:onClick="gotoTracking"
-            android:text="Track" />
+            android:text="Track"
+            android:textSize="14sp"
+            android:textColor="@color/white"/>
 
     </LinearLayout>
 

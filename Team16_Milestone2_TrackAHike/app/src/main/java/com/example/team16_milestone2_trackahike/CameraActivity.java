@@ -1,5 +1,6 @@
 package com.example.team16_milestone2_trackahike;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -28,14 +29,14 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-public class CameraActivity extends AppCompatActivity implements View.OnClickListener {
+public class CameraActivity extends Activity implements View.OnClickListener {
 //code was taken from the camera lecture code
     //testing functionality for now, will edit this code to fit our functionality
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
     PreviewView previewView;
     private CameraProvider cameraProvider;
 
-    private Button buttonCaptureSave, buttonCaptureShow;
+    private Button buttonCaptureSave, buttonCaptureShow, backButton;
     private ImageView imageViewCaptured;
 
 
@@ -51,6 +52,10 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
 
+        backButton = (Button) findViewById(R.id.settingsButton);
+
+        backButton.setOnClickListener(this::gotoSettings);
+
 
         buttonCaptureShow = findViewById(R.id.buttonCaptureShow);
 
@@ -58,7 +63,6 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
 
 
         buttonCaptureShow.setOnClickListener(this);
-
 
 
         if (allPermissionsGranted()) {
@@ -129,14 +133,15 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
 
 
 
-
-
-            Toast.makeText(this, "Profile Picture has been updated", Toast.LENGTH_LONG).show();
-
        // } else if (id == R.id.buttonCaptureShow) {
             Intent camera_intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             startActivityForResult(camera_intent, img_id);
        // }
+    }
+
+    public void gotoSettings(View view){
+        Intent i = new Intent(this, Settings.class);
+        startActivity(i);
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

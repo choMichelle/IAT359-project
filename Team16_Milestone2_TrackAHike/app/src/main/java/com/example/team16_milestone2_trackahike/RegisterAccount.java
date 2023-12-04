@@ -27,7 +27,7 @@ public class RegisterAccount extends Activity implements View.OnClickListener {
         registerButton.setOnClickListener(this);
     }
 
-    //save username and password to sharedPrefs
+    //save username and password to sharedPrefs on button click
     @Override
     public void onClick(View view) {
         SharedPreferences sharedPrefs = getSharedPreferences("MyData", Context.MODE_PRIVATE);

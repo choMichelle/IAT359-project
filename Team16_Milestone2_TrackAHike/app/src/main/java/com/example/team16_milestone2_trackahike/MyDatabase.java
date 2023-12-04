@@ -21,12 +21,16 @@ public class MyDatabase {
     }
 
     //add record into db (records table)
-    public long insertData(String name, String seconds, String steps, String category) {
+    public long insertData(String name, String seconds, String steps, String distance,
+                           String calories, String speed, String category) {
         db = helper.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(Constants.NAME, name);
         contentValues.put(Constants.TIME, seconds);
         contentValues.put(Constants.STEPS, steps);
+        contentValues.put(Constants.DISTANCE, distance);
+        contentValues.put(Constants.CALORIES, calories);
+        contentValues.put(Constants.SPEED, speed);
         contentValues.put(Constants.CATEGORY, category);
         long id = db.insert(Constants.TABLE_NAME, null, contentValues);
         return id;
@@ -45,15 +49,16 @@ public class MyDatabase {
     //get cursor for all exercise session data
     public Cursor getData() {
         SQLiteDatabase db = helper.getWritableDatabase();
-        String[] columns = {Constants.UID, Constants.NAME, Constants.TIME, Constants.STEPS, Constants.CATEGORY};
+        String[] columns = {Constants.UID, Constants.NAME, Constants.TIME, Constants.STEPS,
+                Constants.DISTANCE, Constants.CALORIES, Constants.SPEED, Constants.CATEGORY};
         Cursor cursor = db.query(Constants.TABLE_NAME, columns, null, null, null, null, null);
         return cursor;
     }
 
-    //return filtered exercise records
+    //return filtered exercise records IDs
     public ArrayList<String> getFilteredData(String category) {
         SQLiteDatabase db = helper.getWritableDatabase();
-        String[] columns = {Constants.NAME, Constants.TIME, Constants.STEPS, Constants.CATEGORY};
+        String[] columns = {Constants.UID, Constants.CATEGORY};
 
         String selection = Constants.CATEGORY + "='" + category + "'";
         Cursor cursor = db.query(Constants.TABLE_NAME, columns, selection, null, null, null, null);
@@ -62,14 +67,15 @@ public class MyDatabase {
 
         cursor.moveToLast();
         while (!cursor.isBeforeFirst()) {
-            int index1 = cursor.getColumnIndex(Constants.NAME);
-            String recName = cursor.getString(index1);
-            filteredResults.add(recName);
+            int index1 = cursor.getColumnIndex(Constants.UID);
+            String recID = cursor.getString(index1);
+            filteredResults.add(recID);
             cursor.moveToPrevious();
         }
         return filteredResults;
     }
 
+    //get all photos related to the selected exercise record
     public Cursor getPhotos(String recordID) {
         SQLiteDatabase db = helper.getWritableDatabase();
         String[] columns = {Constants.PHOTO_CONTENT, Constants.RECORD_ID};
@@ -84,6 +90,7 @@ public class MyDatabase {
     public void deleteRecord(String currentRecordID) {
         SQLiteDatabase db = helper.getWritableDatabase();
         db.delete(Constants.TABLE_NAME, "_id=?", new String[]{currentRecordID});
+        db.delete(Constants.PHOTOS_TABLE_NAME, "recordID=?", new String[]{currentRecordID});
         db.close();
     }
 }

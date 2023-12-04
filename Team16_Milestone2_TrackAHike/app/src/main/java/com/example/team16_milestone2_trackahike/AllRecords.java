@@ -58,9 +58,9 @@ public class AllRecords extends Activity {
             ArrayList<String> recordsArray = new ArrayList<String>();
 
             while (!cursor.isBeforeFirst()) {
-                int index1 = cursor.getColumnIndex(Constants.NAME);
-                String recordName = cursor.getString(index1);
-                recordsArray.add(recordName);
+                int index1 = cursor.getColumnIndex(Constants.UID);
+                String recordUID = cursor.getString(index1);
+                recordsArray.add(recordUID);
                 cursor.moveToPrevious();
             }
 

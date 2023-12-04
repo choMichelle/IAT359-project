@@ -19,6 +19,9 @@ public class MyHelper extends SQLiteOpenHelper {
                     Constants.NAME + " TEXT, " +
                     Constants.TIME + " TEXT, " +
                     Constants.STEPS + " TEXT, " +
+                    Constants.DISTANCE + " TEXT, " +
+                    Constants.CALORIES + " TEXT, " +
+                    Constants.SPEED + " TEXT, " +
                     Constants.CATEGORY + " TEXT);" ;
 
     //creates table to hold photos related to each exercise record

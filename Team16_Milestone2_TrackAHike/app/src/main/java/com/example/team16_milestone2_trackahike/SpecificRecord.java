@@ -103,9 +103,11 @@ public class SpecificRecord extends Activity implements View.OnClickListener {
                         Log.e("Parse time int: ", "could not parse error: " + e);
                     }
 
+                    //get the photo data for the selected record
                     Cursor photoCursor = db.getPhotos(recordID);
                     int photoBytesIndex = photoCursor.getColumnIndex(Constants.PHOTO_CONTENT);
                     int photoCount = 0; //counts the photos, used to decide which imageView to use
+
                     photoCursor.moveToFirst();
                     while (!photoCursor.isAfterLast()) {
                         byte[] photoBytes = photoCursor.getBlob(photoBytesIndex); //get photo byte array

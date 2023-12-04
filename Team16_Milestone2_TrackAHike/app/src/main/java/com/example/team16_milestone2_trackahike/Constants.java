@@ -9,6 +9,9 @@ public class Constants {
     public static final String NAME = "name";
     public static final String TIME = "Time";
     public static final String STEPS = "Steps";
+    public static final String DISTANCE = "Distance";
+    public static final String CALORIES = "Calories";
+    public static final String SPEED = "Speed";
     public static final String CATEGORY = "Category";
 
     //constants for the photos table, each record holds 1 photo
@@ -17,5 +20,5 @@ public class Constants {
     public static final String PHOTO_CONTENT = "photoBytes";
     public static final String RECORD_ID = "recordID"; //foreign key to link to individual records
 
-    public static final int DATABASE_VERSION = 6;
+    public static final int DATABASE_VERSION = 7;
 }

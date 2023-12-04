@@ -5,8 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
+    android:background="@drawable/bg"
+    android:orientation="vertical">
 
     <!--<view
         android:id="@+id/previewView"
@@ -17,23 +17,60 @@
         android:layout_weight="1" />
         -->
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp">
+
+        <Button
+            android:id="@+id/settingsButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/button"
+            android:onClick="gotoSettings"
+            android:padding="10dp"
+            android:text="Settings"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/buttonCaptureShow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button"
+            android:padding="10dp"
+            android:text="Open Camera"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+    </LinearLayout>
 
 
-    <Button
-        android:id="@+id/buttonCaptureShow"
-        android:layout_width="wrap_content"
-        android:layout_height="68dp"
-        android:layout_gravity="center|center_horizontal"
-        android:text="Open Camera" />
-
-
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/pagesubtitle"
+        android:gravity="start|center_vertical"
+        android:layout_marginBottom="20dp"
+        android:paddingLeft="20dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:text="Your new profile picture"
+        android:textSize="16sp"
+        android:textColor="@color/white" />
 
     <ImageView
         android:id="@+id/imageViewCapturedImg"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="20dp"
         android:layout_weight="1"
+        android:layout_marginLeft="35dp"
+        android:layout_marginRight="35dp"
+        android:layout_marginBottom="35dp"
         app:srcCompat="@android:drawable/ic_menu_camera" />
 
 </LinearLayout>

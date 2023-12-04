@@ -1,5 +1,6 @@
 package com.example.team16_milestone2_trackahike;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -17,18 +18,16 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class Settings extends AppCompatActivity implements View.OnClickListener {
+public class Settings extends Activity implements View.OnClickListener {
 
-    Button buttonStartCamera;
-    EditText firstName, age, height;
-    Button submitButton;
+    private Button buttonStartCamera;
+    private EditText firstName, age, height;
+    private Button submitButton;
 
-    int stride = 26;
+    private Button trackButton, allRecordsButton, dashboardButton;
 
-    RadioGroup Gender;
-    RadioButton Male, Female, Other;
-
-
+    private RadioGroup Gender;
+    private RadioButton Male, Female, Other;
 
     public static final String DEFAULT = "";
 
@@ -44,18 +43,18 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
         age = (EditText) findViewById(R.id.age);
         height = (EditText) findViewById(R.id.height);
 
-        Gender = findViewById(R.id.Gender);
-        Male = findViewById(R.id.Male);
-        Female = findViewById(R.id.Female);
-        Other = findViewById(R.id.Other);
-        submitButton = findViewById(R.id.submitButton);
+        Gender = (RadioGroup) findViewById(R.id.Gender);
+        Male = (RadioButton) findViewById(R.id.Male);
+        Female = (RadioButton) findViewById(R.id.Female);
+        Other = (RadioButton) findViewById(R.id.Other);
+        submitButton = (Button) findViewById(R.id.submitButton);
         //setting up the edit text for name, age, gender, and height
 
-        buttonStartCamera = findViewById(R.id.StartCamera);
+        buttonStartCamera = (Button) findViewById(R.id.StartCamera);
         buttonStartCamera.setOnClickListener(this);
         //button for starting the camera code
 
-        imageViewCaptured = findViewById(R.id.imageViewCapturedImg);
+        imageViewCaptured = (ImageView) findViewById(R.id.imageViewCapturedImg);
 
         SharedPreferences sharedPrefs = getSharedPreferences("MyData", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPrefs.edit();
@@ -71,7 +70,15 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
             Other.setChecked(true);
         }
 
-        
+        //get navigation buttons
+        trackButton = (Button) findViewById(R.id.trackButton);
+        allRecordsButton = (Button) findViewById(R.id.allRecButton);
+        dashboardButton = (Button) findViewById(R.id.homeButton);
+
+        //set click listeners for navigation buttons
+        trackButton.setOnClickListener(this::gotoTracking);
+        allRecordsButton.setOnClickListener(this::gotoRecords);
+        dashboardButton.setOnClickListener(this::gotoHome);
 
     }
 
@@ -86,7 +93,7 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
 
             byte[] b = Base64.decode(encodedImage, Base64.DEFAULT);
 
-            Bitmap bitmapImage = BitmapFactory.decodeByteArray(b, 0, b.length);
+            Bitmap bitmapImage = Utility.toBitmap(b);
             imageViewCaptured.setImageBitmap(bitmapImage);
         }
 
@@ -106,7 +113,6 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
 
         String ageInput = age.getText().toString();
         String heightInput = height.getText().toString();
-        editor.putInt("stride", stride);
 
 
         if (ageInput == null || ageInput.trim().equals("")) {
@@ -122,16 +128,7 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
             editor.commit();
         }
 
-
-
         }
-
-
-
-
-
-
-
 
     public void btnClicked(View view) {
         SharedPreferences sharedPrefs = getSharedPreferences("MyData", Context.MODE_PRIVATE);
@@ -146,6 +143,21 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
 
         }
         editor.commit();
-
     }
+
+    public void gotoTracking(View view) {
+        Intent i = new Intent(this, StatTracking.class);
+        startActivity(i);
+    }
+
+    public void gotoRecords(View view) {
+        Intent i = new Intent(this, AllRecords.class);
+        startActivity(i);
+    }
+
+    public void gotoHome(View view) {
+        Intent i = new Intent(this, UserDashboard.class);
+        startActivity(i);
+    }
+
 }

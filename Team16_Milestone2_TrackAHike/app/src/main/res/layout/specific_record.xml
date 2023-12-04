@@ -80,8 +80,6 @@
                     android:textColor="@color/white"/>
             </LinearLayout>
 
-
-
             <TextView
                 android:id="@+id/textView11"
                 android:layout_width="match_parent"
@@ -154,7 +152,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="0"
+                        android:text="0 km"
                         android:textSize="20sp"
                         android:textColor="@color/white"/>
 
@@ -192,7 +190,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="0"
+                        android:text="0 kcal"
                         android:textSize="20sp"
                         android:textColor="@color/white"/>
 
@@ -220,7 +218,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="0"
+                        android:text="0 km/s"
                         android:textSize="20sp"
                         android:textColor="@color/white"/>
 

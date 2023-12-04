@@ -4,32 +4,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg"
     android:orientation="vertical"
     tools:context=".UserDashboard">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:background="@drawable/pagetitle"
+        android:orientation="horizontal"
+        android:gravity="start|center_vertical"
+        android:paddingLeft="20dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
 
         <TextView
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Welcome " />
+            android:text="Welcome "
+            android:textSize="24sp"
+            android:textColor="@color/white"/>
 
         <TextView
             android:id="@+id/welcomeText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="2" />
-
-        <Button
-            android:id="@+id/trackButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="gotoTracking"
-            android:text="Track" />
+            android:layout_weight="2"
+            android:textSize="24sp"
+            android:textColor="@color/white"/>
 
     </LinearLayout>
 
@@ -46,16 +49,82 @@
             <ImageView
                 android:id="@+id/imageViewCapturedImg"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="200dp"
                 android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
                 android:layout_weight="1"
                 app:srcCompat="@android:drawable/ic_menu_camera" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView19"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/dashboard_nametag"
+                    android:layout_marginLeft="35dp"
+                    android:padding="5dp"
+                    android:text="Your last session"
+                    android:textSize="16sp"
+                    android:textColor="@color/white"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="35dp"
+                    android:layout_marginRight="35dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/dashboard_recordpreview"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+
+                    <ImageView
+                        android:id="@+id/previewPhotoView"
+                        android:layout_width="150dp"
+                        android:layout_height="100dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/doge" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/previewRecNameText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="TextView"
+                            android:textColor="@color/white"
+                            android:textSize="20sp" />
+
+                        <TextView
+                            android:id="@+id/previewGroupNameText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="TextView"
+                            android:textColor="@color/white"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+
         </LinearLayout>
     </ScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/bottombar"
         android:orientation="horizontal"
         android:gravity="center">
 
@@ -63,15 +132,36 @@
             android:id="@+id/settingsButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/button"
+            android:padding="10dp"
+            android:layout_marginRight="5dp"
             android:onClick="gotoSettings"
-            android:text="Settings" />
+            android:text="Settings"
+            android:textSize="14sp"
+            android:textColor="@color/white"/>
 
         <Button
             android:id="@+id/allRecButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/button"
+            android:padding="10dp"
+            android:layout_marginRight="5dp"
             android:onClick="gotoRecords"
-            android:text="All records" />
+            android:text="All records"
+            android:textSize="14sp"
+            android:textColor="@color/white"/>
+
+        <Button
+            android:id="@+id/trackButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button"
+            android:padding="10dp"
+            android:onClick="gotoTracking"
+            android:text="Track"
+            android:textSize="14sp"
+            android:textColor="@color/white"/>
     </LinearLayout>
 
 </LinearLayout>

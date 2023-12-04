@@ -53,7 +53,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
                 android:layout_weight="1"
-                app:srcCompat="@android:drawable/ic_menu_camera" />
+                android:src="@drawable/no_profilepic" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -72,12 +72,14 @@
                     android:textColor="@color/white"/>
 
                 <LinearLayout
+                    android:id="@+id/previewSession"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="35dp"
                     android:layout_marginRight="35dp"
                     android:layout_marginBottom="20dp"
                     android:background="@drawable/dashboard_recordpreview"
+                    android:onClick="accessLastRecord"
                     android:orientation="horizontal"
                     android:padding="10dp">
 
@@ -90,7 +92,7 @@
                         android:layout_marginRight="10dp"
                         android:layout_marginBottom="10dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/doge" />
+                        android:src="@drawable/no_image" />
 
                     <LinearLayout
                         android:layout_width="match_parent"

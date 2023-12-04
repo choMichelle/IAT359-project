@@ -3,6 +3,7 @@ package com.example.team16_milestone2_trackahike;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -37,9 +38,9 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
     //variables to hold/track stats
     private int seconds = 0; //holds recorded time in seconds
     private int totalSteps; //holds number of steps taken
-    private float totalDistance; //holds distance travelled (calculated)
-    private float caloriesBurned; //holds calories burned (calculated)
-    private float moveSpeed; //holds movement speed (calculated)
+    private double totalDistance; //holds distance travelled (calculated)
+    private double caloriesBurned; //holds calories burned (calculated)
+    private double moveSpeed; //holds movement speed (calculated)
 
     //variables to control/track when the tracker is running
     private boolean isRunning = false; //checks if the tracker is currently active
@@ -50,9 +51,11 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
     private ImageView imgView0, imgView1, imgView2,
                     imgView3, imgView4, imgView5; //views to hold captured photos
     private ImageView[] imgViews; //holds all imageviews for easy retrieval
+    private static final int REQUEST_CODE = 1; //request code for camera intent
     private static int img_id = 0; //used to get the correct imageview to fill
-    private String img_placeholder_path = "@drawable/doge"; //TODO - replace
-    private Drawable img_placeholder;
+    private int totalImgs = 0; //used to help save photos when more than 6 photos are being taken
+    private String img_placeholder_path = "@drawable/no_image"; //path to placeholder image
+    private Drawable img_placeholder; //placeholder for 'empty' imageviews
     private Button startBtn, pauseBtn, saveBtn, resetBtn; //stat tracking buttons
     private Button cameraBtn; //button to open camera
     private Button settingsButton, dashboardButton, allRecordsButton; //bottom bar of buttons
@@ -144,14 +147,18 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
             //set stats variables
             seconds = savedInstanceState.getInt("seconds");
             totalSteps = savedInstanceState.getInt("steps");
-            totalDistance = savedInstanceState.getFloat("distance");
-            caloriesBurned = savedInstanceState.getFloat("calories");
-            moveSpeed = savedInstanceState.getFloat("speed");
+            totalDistance = savedInstanceState.getDouble("distance");
+            caloriesBurned = savedInstanceState.getDouble("calories");
+            moveSpeed = savedInstanceState.getDouble("speed");
 
             //set tracker state variables
             isRunning = savedInstanceState.getBoolean("running");
             wasRunning = savedInstanceState.getBoolean("wasRunning");
             recordStarted = savedInstanceState.getBoolean("recordStarted");
+
+            //set photo variables
+            img_id = savedInstanceState.getInt("imgID");
+            totalImgs = savedInstanceState.getInt("totalImgs");
 
             //format and set text for timer
             int hrs = seconds / 3600;
@@ -191,14 +198,18 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
         //save stats values
         savedInstanceState.putInt("seconds", seconds);
         savedInstanceState.putInt("steps", totalSteps);
-        savedInstanceState.putFloat("distance", totalDistance);
-        savedInstanceState.putFloat("calories", caloriesBurned);
-        savedInstanceState.putFloat("speed", moveSpeed);
+        savedInstanceState.putDouble("distance", totalDistance);
+        savedInstanceState.putDouble("calories", caloriesBurned);
+        savedInstanceState.putDouble("speed", moveSpeed);
 
         //save tracker state variables
         savedInstanceState.putBoolean("running", isRunning);
         savedInstanceState.putBoolean("wasRunning", wasRunning);
         savedInstanceState.putBoolean("recordStarted", recordStarted);
+
+        //save photo state variables
+        savedInstanceState.putInt("imgID", img_id);
+        savedInstanceState.putInt("totalImgs", totalImgs);
     }
 
     @Override
@@ -240,7 +251,7 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
     private void saveSession(View view) {
         //get the variables to save
         String name = sessionName.getText().toString(); //name of session
-        String category = sessionCategory.getText().toString(); //group name
+        String category = sessionCategory.getText().toString().toLowerCase(); //group name
         String time = String.valueOf(seconds); //time in seconds
         String steps = String.valueOf(totalSteps); //steps taken
         String distance = String.valueOf(totalDistance); //distance travelled (calculated)
@@ -267,23 +278,46 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
         if (canSave) {
             long recordID = db.insertData(name, time, steps, distance, calories, speed, category); //save stats data to db, records table
 
-            if (img_id > 0) { //check if a photo has been taken (ex. img_id would =1 if 1 photo has been taken)
-                for (int i = 0; i < img_id; i++) { //loop through all photos to be saved
-                    ImageView currentPhoto = imgViews[i];
-                    BitmapDrawable photoBitmap = (BitmapDrawable) currentPhoto.getDrawable();
-                    byte[] photoBytes = Utility.toBytes(photoBitmap.getBitmap());
-                    long photoID = db.insertPhotos(photoBytes, String.valueOf(recordID));
+            //check if a photo has been taken
+            //(ex. img_id would =1 if 1 photo has been taken)
+            if (img_id > 0 || totalImgs == 6) {
+                if (totalImgs == 6) {
+                    for (int i = 0; i < totalImgs; i++) { //loop through all photos to be saved
+                        ImageView currentPhoto = imgViews[i];
+                        BitmapDrawable photoBitmap = (BitmapDrawable) currentPhoto.getDrawable();
+                        byte[] photoBytes = Utility.toBytes(photoBitmap.getBitmap());
+                        long photoID = db.insertPhotos(photoBytes, String.valueOf(recordID));
 
-                    //toast result - success/failure to add to db
-                    if (photoID < 0)
-                    {
-                        Toast.makeText(this, "photos add to db fail", Toast.LENGTH_SHORT).show();
-                    }
-                    else
-                    {
-                        Toast.makeText(this, "photos add to db success", Toast.LENGTH_SHORT).show();
+                        //toast result - success/failure to add to db
+                        if (photoID < 0)
+                        {
+                            Toast.makeText(this, "photos add to db fail", Toast.LENGTH_SHORT).show();
+                        }
+                        else
+                        {
+                            Toast.makeText(this, "photos add to db success", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
+                else {
+                    for (int i = 0; i < img_id; i++) { //loop through all photos to be saved
+                        ImageView currentPhoto = imgViews[i];
+                        BitmapDrawable photoBitmap = (BitmapDrawable) currentPhoto.getDrawable();
+                        byte[] photoBytes = Utility.toBytes(photoBitmap.getBitmap());
+                        long photoID = db.insertPhotos(photoBytes, String.valueOf(recordID));
+
+                        //toast result - success/failure to add to db
+                        if (photoID < 0)
+                        {
+                            Toast.makeText(this, "photos add to db fail", Toast.LENGTH_SHORT).show();
+                        }
+                        else
+                        {
+                            Toast.makeText(this, "photos add to db success", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+
             }
 
             //toast result - success/failure to add to db
@@ -323,8 +357,9 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
         //reset start button text
         startBtn.setText("Start tracking");
 
-        //reset photo id
+        //reset photo variables
         img_id = 0;
+        totalImgs = 0;
 
         //loop through all image views and replace with placeholders
         for (ImageView i : imgViews) {
@@ -337,15 +372,21 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
     public void countTime() {
 
         while (isRunning) {
+            //format timer
             int hrs = seconds / 3600;
             int mins = (seconds % 3600) / 60;
             int secs = seconds % 60;
+
+            calculateStats(seconds, totalSteps);
 
             //update timer text on UI thread
             this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     timeText.setText(hrs + ":" + mins + ":" + secs);
+                    distanceText.setText(String.format("%.2f", totalDistance) + " km");
+                    caloriesText.setText(String.format("%.2f", caloriesBurned) + " kcal");
+                    speedText.setText(String.format("%.3f", moveSpeed) + " km/s");
                 }
             });
 
@@ -375,6 +416,21 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
         }
     }
 
+    //calculate distance travelled, calories burned, movement speed
+    public void calculateStats(int time, int steps) {
+        SharedPreferences sharedPrefs = getSharedPreferences("MyData", Context.MODE_PRIVATE);
+        int savedStepLength = sharedPrefs.getInt("stepLength", 0); //get user's step length
+        String savedKcalBurn = sharedPrefs.getString("kcalBurnPerStep", ""); //get user's kcal burn rate
+
+        double stepMetres = Utility.convertInchToMetre(savedStepLength); //convert step length to metres
+        double kcalBurnRate = Double.parseDouble(savedKcalBurn); //parse kcal burn rate to double
+
+        totalDistance = steps * stepMetres / 1000; //calculate distance in km
+        caloriesBurned = steps * kcalBurnRate; //calculate calories burned in kcal
+        moveSpeed = totalDistance / time; //calculate movement speed in km/s
+
+    }
+
     @Override
     public void onSensorChanged(SensorEvent event) {
 
@@ -389,19 +445,32 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
 
     //on button press, move to device's camera app
     public void openCamera(View view) {
-        Intent camera_intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(camera_intent, img_id);
+        if (isRunning) {
+            Intent camera_intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(camera_intent, REQUEST_CODE);
+        }
+        else {
+            Toast.makeText(this, "Please start tracking first", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Bitmap photo = (Bitmap) data.getExtras().get("data");
+        if (data != null) {
+            Bitmap photo = (Bitmap) data.getExtras().get("data");
 
-        if (img_id < 6) {
-            ImageView view = imgViews[img_id];
-            view.setImageBitmap(photo);
-            img_id++;
+            if (img_id < 6) {
+                ImageView view = imgViews[img_id];
+                view.setImageBitmap(photo);
+                img_id++;
+            }
+            if (img_id == 6) {
+                img_id = 0; //reset id to point at first photo, will overwrite old photos
+                totalImgs = 6;
+            }
         }
+
 
     }
 

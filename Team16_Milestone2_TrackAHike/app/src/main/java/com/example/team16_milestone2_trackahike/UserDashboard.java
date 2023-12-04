@@ -12,6 +12,7 @@ import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,16 +20,15 @@ import androidx.appcompat.app.AppCompatActivity;
 public class UserDashboard extends Activity implements View.OnClickListener {
 
     private Button trackButton, settingsButton, allRecordsButton;
-
     public static final String DEFAULT= "";
-
     private TextView welcomeText;
-
     private ImageView imageViewCaptured;
+    private LinearLayout previewSession;
 
     //views to hold last recorded exercise session
-    public TextView recordNameText, recordGroupText;
-    public ImageView previewPhoto;
+    private TextView recordNameText, recordGroupText;
+    private ImageView previewPhoto;
+    private String recordID;
 
     private MyDatabase db;
 
@@ -55,9 +55,13 @@ public class UserDashboard extends Activity implements View.OnClickListener {
         imageViewCaptured = (ImageView) findViewById(R.id.imageViewCapturedImg);
 
         //get views to hold brief info about last exercise session
+        previewSession = (LinearLayout) findViewById(R.id.previewSession);
         recordNameText = (TextView) findViewById(R.id.previewRecNameText);
         recordGroupText = (TextView) findViewById(R.id.previewGroupNameText);
         previewPhoto = (ImageView) findViewById(R.id.previewPhotoView);
+
+        //set click listener for the last session preview container
+        previewSession.setOnClickListener(this::accessLastRecord);
 
         //retrieve info about last exercise session
         Cursor cursor = db.getData(); //get all record data
@@ -69,7 +73,7 @@ public class UserDashboard extends Activity implements View.OnClickListener {
         int index1 = cursor.getColumnIndex(Constants.NAME);
         int index2 = cursor.getColumnIndex(Constants.CATEGORY);
 
-        String recordID = cursor.getString(index0);
+        recordID = cursor.getString(index0);
         String recName = cursor.getString(index1);
         String groupName = cursor.getString(index2);
 
@@ -112,6 +116,14 @@ public class UserDashboard extends Activity implements View.OnClickListener {
         }
 
     }
+
+    //go to the specific record shown in the preview of the last record
+    public void accessLastRecord(View view) {
+        Intent i = new Intent(this, SpecificRecord.class);
+        i.putExtra("recordID", recordID);
+        startActivity(i);
+    }
+
     public void gotoTracking(View view) {
         Intent i = new Intent(this, StatTracking.class);
         startActivity(i);

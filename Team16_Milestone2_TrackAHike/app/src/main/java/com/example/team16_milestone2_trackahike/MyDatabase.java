@@ -60,7 +60,7 @@ public class MyDatabase {
         SQLiteDatabase db = helper.getWritableDatabase();
         String[] columns = {Constants.UID, Constants.CATEGORY};
 
-        String selection = Constants.CATEGORY + "='" + category + "'";
+        String selection = Constants.CATEGORY + "='" + category.toLowerCase() + "'";
         Cursor cursor = db.query(Constants.TABLE_NAME, columns, selection, null, null, null, null);
 
         ArrayList<String> filteredResults = new ArrayList<String>();

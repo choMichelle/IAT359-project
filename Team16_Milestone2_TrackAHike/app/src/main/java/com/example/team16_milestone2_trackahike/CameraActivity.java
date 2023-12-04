@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -25,25 +26,19 @@ import androidx.core.content.ContextCompat;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import java.io.ByteArrayOutputStream;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+//
 public class CameraActivity extends Activity implements View.OnClickListener {
-//code was taken from the camera lecture code
-    //testing functionality for now, will edit this code to fit our functionality
-    private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
-    PreviewView previewView;
-    private CameraProvider cameraProvider;
 
-    private Button buttonCaptureSave, buttonCaptureShow, backButton;
-    private ImageView imageViewCaptured;
+    private Button buttonCaptureShow, backButton; //navigation buttons
+    private ImageView imageViewCaptured; //view to hold photo
+    private static final int REQUEST_CODE = 1; //request code for camera implicit intent
 
-
-
-    private static final int img_id = 1;
-
-    private Executor executor = Executors.newSingleThreadExecutor();
+    //variables for camera access permission
     private int REQUEST_CODE_PERMISSIONS = 1001;
     private final String[] REQUIRED_PERMISSIONS = new String[]{"android.permission.CAMERA"};
 
@@ -52,146 +47,79 @@ public class CameraActivity extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
 
+        //get the back button (says 'settings') and set click listener
         backButton = (Button) findViewById(R.id.settingsButton);
-
         backButton.setOnClickListener(this::gotoSettings);
 
-
+        //get open camera button and set click listener
         buttonCaptureShow = findViewById(R.id.buttonCaptureShow);
-
-        imageViewCaptured = findViewById(R.id.imageViewCapturedImg);
-
-
         buttonCaptureShow.setOnClickListener(this);
 
+        //get view to hold photo
+        imageViewCaptured = findViewById(R.id.imageViewCapturedImg);
 
+        //check for permissions
         if (allPermissionsGranted()) {
-            startCamera(); //start camera if permission has been granted by user
-        } else {
+            //do nothing
+        } else { //directly request permissions
             ActivityCompat.requestPermissions(this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS);
         }
     }
 
-    private Executor getExecutor() {
-        return ContextCompat.getMainExecutor(this);
-    }
-
-    public static String encodeToBase64(Bitmap image) {
-        Bitmap immage = image;
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        immage.compress(Bitmap.CompressFormat.PNG, 100, baos);
-        byte[] b = baos.toByteArray();
-        String imageEncoded = Base64.encodeToString(b, Base64.DEFAULT);
-
-        Log.d("Image Log:", imageEncoded);
-        return imageEncoded;
-    }
-
-    private void startCamera() {
-
-        final ListenableFuture<ProcessCameraProvider> cameraProviderFuture = ProcessCameraProvider.getInstance(this);
-
-        cameraProviderFuture.addListener(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
-                    //bindPreview(cameraProvider);
-
-                } catch (ExecutionException | InterruptedException e) {
-                    // This should never be reached.
-                }
-            }
-        }, ContextCompat.getMainExecutor(this));
-    }
-
-    //void bindPreview(@NonNull ProcessCameraProvider cameraProvider) {
-
-        //cameraProvider.unbindAll();
-
-       // Preview preview = new Preview.Builder()
-               // .build();
-
-       // CameraSelector cameraSelector = new CameraSelector.Builder()
-               // .requireLensFacing(CameraSelector.LENS_FACING_BACK)
-               // .build();
-
-
-       // imageCapture = new ImageCapture.Builder()
-               // .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
-               // .build();
-       // preview.setSurfaceProvider(previewView.getSurfaceProvider());
-       // cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture);
-    //}
-
+    //on clicking open camera button, opens device's camera
     @Override
     public void onClick(View view) {
-       // int id = view.getId();
-       // if (id == R.id.buttonCaptureSave) {
-           // capturePhoto();
-            //figure out how to save photo in saved pref
+        Intent camera_intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
+        //check if the intent can be handled
+        PackageManager packageManager = getPackageManager();
+        List<ResolveInfo> activities = packageManager.queryIntentActivities(camera_intent, 0);
+        boolean isIntentSafe = activities.size() > 0;
 
+        //start activity if safe
+        if (isIntentSafe) {
+            startActivityForResult(camera_intent, REQUEST_CODE);
+        }
+        else {
+            Toast.makeText(this, "No camera available", Toast.LENGTH_SHORT).show();
+        }
 
-       // } else if (id == R.id.buttonCaptureShow) {
-            Intent camera_intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            startActivityForResult(camera_intent, img_id);
-       // }
     }
 
+    //navigate to settings activity
     public void gotoSettings(View view){
         Intent i = new Intent(this, Settings.class);
         startActivity(i);
     }
 
+    //get result, if any, from the device camera activity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Bitmap photo = (Bitmap) data.getExtras().get("data");
-        imageViewCaptured.setImageBitmap(photo);
 
-        SharedPreferences sharedPrefs = getSharedPreferences("MyData", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPrefs.edit();
+        if (data != null) { //check if a photo was taken
+            Bitmap photo = (Bitmap) data.getExtras().get("data"); //get the photo
+            imageViewCaptured.setImageBitmap(photo); //set the photo in the imageview
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        photo.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            //prepare to save the photo into sharedprefs
+            SharedPreferences sharedPrefs = getSharedPreferences("MyData", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPrefs.edit();
 
-        byte[] compressImage = baos.toByteArray();
-        String sEncodedImage = Base64.encodeToString(compressImage, Base64.DEFAULT);
+            //compress image into byte[]
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            photo.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] compressImage = baos.toByteArray();
 
-        editor.putString("imageViewCapturedImg",sEncodedImage);
+            //encode photo into a string
+            String sEncodedImage = Base64.encodeToString(compressImage, Base64.DEFAULT);
 
-        editor.commit();
-
+            //save the photo string into sharedprefs
+            editor.putString("imageViewCapturedImg",sEncodedImage);
+            editor.commit();
+        }
 
     }
 
-    /*private void capturePhoto() {
-        long timeStamp = System.currentTimeMillis();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, timeStamp);
-        contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg");
-
-
-        imageCapture.takePicture(
-                new ImageCapture.OutputFileOptions.Builder(
-                        getContentResolver(),
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                        contentValues
-                ).build(),
-                getExecutor(),
-                new ImageCapture.OnImageSavedCallback() {
-                    @Override
-                    public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
-                        Toast.makeText(CameraActivity.this, "Saving...", Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onError(@NonNull ImageCaptureException exception) {
-                        Toast.makeText(CameraActivity.this, "Error: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }*/
-
+    //check for required permissions
     private boolean allPermissionsGranted() {
 
         for (String permission : REQUIRED_PERMISSIONS) {

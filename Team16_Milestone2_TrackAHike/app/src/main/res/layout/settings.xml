@@ -124,7 +124,8 @@
                         <RadioButton
                             android:id="@+id/Male"
                             android:layout_width="90dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
                             android:text="Male"
                             android:onClick="btnClicked"
                             android:textSize="16sp"
@@ -134,7 +135,8 @@
                         <RadioButton
                             android:id="@+id/Female"
                             android:layout_width="90dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
                             android:text="Female"
                             android:onClick="btnClicked"
                             android:textSize="16sp"
@@ -144,7 +146,8 @@
                         <RadioButton
                             android:id="@+id/Other"
                             android:layout_width="90dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
                             android:text="Other"
                             android:onClick="btnClicked"
                             android:textSize="16sp"
@@ -185,6 +188,33 @@
                         android:textColor="@color/white"/>
 
                 </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/weightLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="10dp">
+                    <TextView
+                        android:id="@+id/textView10"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="10"
+                        android:text="Weight in kg"
+                        android:textSize="16sp"
+                        android:textColor="@color/white"/>
+                    <EditText
+                        android:id="@+id/weight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="0dp"
+                        android:hint="Change Weight in kg"
+                        android:inputType="number"
+                        android:textColorHint="@color/white"
+                        android:backgroundTint="@color/white"
+                        android:textSize="16sp"
+                        android:textColor="@color/white"/>
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
@@ -207,6 +237,20 @@
 
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/textView11"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/pagesubtitle"
+                android:gravity="start|center_vertical"
+                android:layout_marginBottom="20dp"
+                android:paddingLeft="20dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:text="Profile picture:"
+                android:textSize="16sp"
+                android:textColor="@color/white"/>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -218,7 +262,8 @@
                     android:layout_height="283dp"
                     android:layout_marginLeft="35dp"
                     android:layout_marginRight="35dp"
-                    android:layout_marginBottom="20dp"/>
+                    android:layout_marginBottom="20dp"
+                    android:src="@drawable/no_profilepic"/>
                 <Button
                     android:id="@+id/StartCamera"
                     android:layout_width="wrap_content"

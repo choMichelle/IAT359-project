@@ -21,7 +21,7 @@ import java.util.ArrayList;
 //handle populating recycler view with items
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHolder> {
 
-    public ArrayList<String> list;
+    public ArrayList<String> list; //holds dataset
     public CustomAdapter(ArrayList<String> list) { this.list = list; }
 
     //inflate recycler view with layout from row.xml
@@ -35,7 +35,8 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     //get items from the dataset and set text
     @Override
     public void onBindViewHolder(CustomAdapter.MyViewHolder holder, int position) {
-        String recordID = list.get(position).toString(); //is uid of the record
+        String recID = list.get(position).toString(); //is uid of the record
+        holder.recordID = recID;
         Cursor cursor = holder.db.getData(); //get all record data
 
         int index0 = cursor.getColumnIndex(Constants.UID);
@@ -43,7 +44,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         cursor.moveToLast();
         while (!cursor.isBeforeFirst()) {
             String checkRecordUID = cursor.getString(index0); //get UID of current record
-            if (recordID.equals(checkRecordUID)) { //check if current record UID and UID from dataset match
+            if (recID.equals(checkRecordUID)) { //check if current record UID and UID from dataset match
 
                 int index1 = cursor.getColumnIndex(Constants.NAME);
                 int index2 = cursor.getColumnIndex(Constants.CATEGORY);
@@ -55,7 +56,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
                 holder.recordGroupText.setText(groupName);
 
                 //get a photo for the record preview
-                Cursor photoCursor = holder.db.getPhotos(recordID);
+                Cursor photoCursor = holder.db.getPhotos(recID);
                 int photoBytesIndex = photoCursor.getColumnIndex(Constants.PHOTO_CONTENT);
 
                 photoCursor.moveToFirst(); //go to the first image
@@ -84,6 +85,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         public LinearLayout layout;
         public TextView recordNameText, recordGroupText;
         public ImageView previewPhoto;
+        public String recordID;
         private MyDatabase db;
         Context context;
 
@@ -104,7 +106,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         @Override
         public void onClick(View view) {
             Intent i = new Intent(context, SpecificRecord.class);
-            i.putExtra("recordName", recordNameText.getText().toString());
+            i.putExtra("recordID", recordID);
             context.startActivity(i);
         }
     }

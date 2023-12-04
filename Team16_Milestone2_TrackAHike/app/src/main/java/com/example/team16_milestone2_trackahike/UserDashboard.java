@@ -50,7 +50,7 @@ public class UserDashboard extends AppCompatActivity implements View.OnClickList
         super.onResume();
         SharedPreferences sharedPrefs = getSharedPreferences("MyData", Context.MODE_PRIVATE);
         String nameText = sharedPrefs.getString("name", DEFAULT);
-        String savedHeight = sharedPrefs.getString("height", DEFAULT);
+
 
         welcomeText.setText(nameText);
         if(sharedPrefs.contains("imageViewCapturedImg"))

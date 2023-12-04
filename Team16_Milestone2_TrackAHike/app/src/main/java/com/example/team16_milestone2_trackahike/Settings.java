@@ -11,7 +11,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,25 +20,34 @@ import androidx.appcompat.app.AppCompatActivity;
 public class Settings extends AppCompatActivity implements View.OnClickListener {
 
     Button buttonStartCamera;
-    EditText firstName, age, gender,height;
+    EditText firstName, age, height;
     Button submitButton;
 
-    public static final String DEFAULT= "";
+    int stride = 26;
 
-    private Bitmap bitmapImage;
+    RadioGroup Gender;
+    RadioButton Male, Female, Other;
+
+
+
+    public static final String DEFAULT = "";
+
+
     private ImageView imageViewCaptured;
-    private TextView imgText;
-
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings);
-        firstName = (EditText)findViewById(R.id.firstName);
-        age = (EditText)findViewById(R.id.age);
-        gender = (EditText)findViewById(R.id.gender);
-        height = (EditText)findViewById(R.id.height);
+        firstName = (EditText) findViewById(R.id.firstName);
+        age = (EditText) findViewById(R.id.age);
+        height = (EditText) findViewById(R.id.height);
+
+        Gender = findViewById(R.id.Gender);
+        Male = findViewById(R.id.Male);
+        Female = findViewById(R.id.Female);
+        Other = findViewById(R.id.Other);
         submitButton = findViewById(R.id.submitButton);
         //setting up the edit text for name, age, gender, and height
 
@@ -45,8 +55,32 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
         buttonStartCamera.setOnClickListener(this);
         //button for starting the camera code
 
-
         imageViewCaptured = findViewById(R.id.imageViewCapturedImg);
+
+        SharedPreferences sharedPrefs = getSharedPreferences("MyData", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPrefs.edit();
+        int genderSP = sharedPrefs.getInt("genderSP", 4);
+        int heightNumber = sharedPrefs.getInt("heightNumber", 160);
+
+        if (genderSP == 1) {
+            Male.setChecked(true);
+
+        } else if (genderSP == 0) {
+            Female.setChecked(true);
+        } else if (genderSP == 2) {
+            Other.setChecked(true);
+        }
+
+
+        if (genderSP==0&&heightNumber<162){
+            stride = 26;
+        } else if (genderSP==0&&heightNumber>162) {
+            stride = 28;
+        }else if (genderSP==1||genderSP==3 &&heightNumber<175) {
+            stride = 28;
+        }else if (genderSP==1||genderSP==3 &&heightNumber>175) {
+            stride = 30;
+        }
 
 
 
@@ -54,14 +88,13 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         SharedPreferences sharedPrefs = getSharedPreferences("MyData", Context.MODE_PRIVATE);
 
-        if(sharedPrefs.contains("imageViewCapturedImg"))
-        {
+        if (sharedPrefs.contains("imageViewCapturedImg")) {
 
-            String encodedImage = sharedPrefs.getString("imageViewCapturedImg",null);
+            String encodedImage = sharedPrefs.getString("imageViewCapturedImg", null);
 
             byte[] b = Base64.decode(encodedImage, Base64.DEFAULT);
 
@@ -77,25 +110,52 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
         startActivity(i);
     }
 
-    public void submit (View view){
 
-
+    public void submit(View view) {
         SharedPreferences sharedPrefs = getSharedPreferences("MyData", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPrefs.edit();
         editor.putString("name", firstName.getText().toString());
-        editor.putString("age", age.getText().toString());
-        editor.putString("gender", gender.getText().toString());
-        editor.putString("height", height.getText().toString());
 
-        Toast.makeText(this, "User Settings Have Been Updated", Toast.LENGTH_LONG).show();
+        String ageInput = age.getText().toString();
+        String heightInput = height.getText().toString();
+
+        if (ageInput == null || ageInput.trim().equals("")) {
+            Toast.makeText(this, "Sorry you did not fill in all the fields", Toast.LENGTH_SHORT).show();
+        } else if (heightInput == null || heightInput.trim().equals("")) {
+            Toast.makeText(this, "Sorry you did not fill in all the fields", Toast.LENGTH_SHORT).show();
+        } else {
+            int ageNumber = Integer.parseInt(age.getText().toString());
+            editor.putInt("age", ageNumber);
+            int heightNumber = Integer.parseInt(height.getText().toString());
+            editor.putInt("height", heightNumber);
+            Toast.makeText(this, "Settings have been saved", Toast.LENGTH_SHORT).show();
+            editor.commit();
+        }
 
 
-        //displays toast when the user clicks the button
+
+        }
+
+
+
+
+
+
+
+
+    public void btnClicked(View view) {
+        SharedPreferences sharedPrefs = getSharedPreferences("MyData", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPrefs.edit();
+
+        if (Male.isChecked()) {
+            editor.putInt("genderSP", 1);
+        } else if (Female.isChecked()) {
+            editor.putInt("genderSP", 0);
+        } else if (Other.isChecked()) {
+            editor.putInt("genderSP", 3);
+
+        }
         editor.commit();
-
-
-
-
 
     }
 }

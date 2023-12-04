@@ -3,16 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@drawable/bg">
 
     <TextView
         android:id="@+id/currentRecordNameText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/pagetitle"
+        android:gravity="start|center_vertical"
+        android:textColor="@color/white"
         android:text="No Record"
         android:textSize="24sp"
-        android:gravity="center"
-        android:layout_marginBottom="10dp"/>
+        android:paddingLeft="20dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"/>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -25,110 +30,217 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/textView12"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Time taken" />
-
-            <TextView
-                android:id="@+id/textView15"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="(hrs:mins:secs)"
-                android:textSize="12sp" />
-
-            <TextView
-                android:id="@+id/recordedTimeText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="0:0:0"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/textView10"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Category" />
-
-            <TextView
                 android:id="@+id/recordedCategoryText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/onerec_groupname"
+                android:gravity="start|center_vertical"
+                android:textColor="@color/white"
                 android:text="Text"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:paddingLeft="20dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:background="@drawable/onerec_statbg"
+                android:layout_marginBottom="20dp">
+                <TextView
+                    android:id="@+id/textView12"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Time taken"
+                    android:textSize="14sp"
+                    android:textColor="@color/white"/>
+
+                <TextView
+                    android:id="@+id/textView15"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="(hrs:mins:secs)"
+                    android:textSize="12sp"
+                    android:textColor="@color/white"/>
+
+                <TextView
+                    android:id="@+id/recordedTimeText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="0:0:0"
+                    android:textSize="20sp"
+                    android:textColor="@color/white"/>
+            </LinearLayout>
+
+
 
             <TextView
                 android:id="@+id/textView11"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="5dp"
+                android:background="@drawable/pagesubtitle"
+                android:gravity="start|center_vertical"
+                android:layout_marginBottom="20dp"
+                android:paddingLeft="20dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
                 android:text="Stats:"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:textColor="@color/white"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginBottom="20dp">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:background="@drawable/onerec_statbg"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginRight="30dp"
+                    android:gravity="center">
 
                     <TextView
                         android:id="@+id/textView13"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="Steps taken" />
+                        android:text="Steps taken"
+                        android:textSize="14sp"
+                        android:textColor="@color/white"/>
 
                     <TextView
                         android:id="@+id/recordedStepsText"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="0"
-                        android:textSize="20sp" />
+                        android:textSize="20sp"
+                        android:textColor="@color/white"/>
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:background="@drawable/onerec_statbg"
+                    android:layout_marginRight="40dp"
+                    android:orientation="vertical"
+                    android:gravity="center">
 
                     <TextView
                         android:id="@+id/textView14"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="Distance travelled" />
+                        android:text="Distance travelled"
+                        android:textSize="14sp"
+                        android:textColor="@color/white"/>
 
                     <TextView
                         android:id="@+id/recordedDistanceText"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="0"
-                        android:textSize="20sp" />
+                        android:textSize="20sp"
+                        android:textColor="@color/white"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginBottom="20dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/onerec_statbg"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginRight="30dp"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/textView16"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Calories burned"
+                        android:textSize="14sp"
+                        android:textColor="@color/white"/>
+
+                    <TextView
+                        android:id="@+id/recordedCaloriesText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="0"
+                        android:textSize="20sp"
+                        android:textColor="@color/white"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/onerec_statbg"
+                    android:layout_marginRight="40dp"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/textView17"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Speed"
+                        android:textSize="14sp"
+                        android:textColor="@color/white"/>
+
+                    <TextView
+                        android:id="@+id/recordedSpeedText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="0"
+                        android:textSize="20sp"
+                        android:textColor="@color/white"/>
 
                 </LinearLayout>
 
             </LinearLayout>
 
             <TextView
-                android:id="@+id/textView17"
+                android:id="@+id/textView18"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/pagesubtitle"
+                android:gravity="start|center_vertical"
+                android:layout_marginBottom="20dp"
+                android:paddingLeft="20dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
                 android:text="Photos:"
-                android:textSize="16sp"/>
+                android:textSize="16sp"
+                android:textColor="@color/white"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -139,8 +251,10 @@
                     android:id="@+id/photoGalleryView0"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
+                    android:layout_marginLeft="35dp"
+                    android:layout_marginRight="35dp"
+                    android:layout_marginBottom="20dp"
                     android:layout_weight="1"
-                    android:layout_marginBottom="5dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/doge" />
 
@@ -148,8 +262,10 @@
                     android:id="@+id/photoGalleryView1"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
+                    android:layout_marginLeft="35dp"
+                    android:layout_marginRight="35dp"
+                    android:layout_marginBottom="20dp"
                     android:layout_weight="1"
-                    android:layout_marginBottom="5dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/doge" />
 
@@ -157,8 +273,10 @@
                     android:id="@+id/photoGalleryView2"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
+                    android:layout_marginLeft="35dp"
+                    android:layout_marginRight="35dp"
+                    android:layout_marginBottom="20dp"
                     android:layout_weight="1"
-                    android:layout_marginBottom="5dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/doge" />
 
@@ -166,8 +284,10 @@
                     android:id="@+id/photoGalleryView3"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
+                    android:layout_marginLeft="35dp"
+                    android:layout_marginRight="35dp"
+                    android:layout_marginBottom="20dp"
                     android:layout_weight="1"
-                    android:layout_marginBottom="5dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/doge" />
 
@@ -175,8 +295,10 @@
                     android:id="@+id/photoGalleryView4"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
+                    android:layout_marginLeft="35dp"
+                    android:layout_marginRight="35dp"
+                    android:layout_marginBottom="20dp"
                     android:layout_weight="1"
-                    android:layout_marginBottom="5dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/doge" />
 
@@ -184,8 +306,10 @@
                     android:id="@+id/photoGalleryView5"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
+                    android:layout_marginLeft="35dp"
+                    android:layout_marginRight="35dp"
+                    android:layout_marginBottom="20dp"
                     android:layout_weight="1"
-                    android:layout_marginBottom="5dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/doge" />
 
@@ -195,8 +319,13 @@
                 android:id="@+id/deleteButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/button"
+                android:padding="10dp"
                 android:layout_gravity="center"
-                android:text="Delete record" />
+                android:layout_marginBottom="20dp"
+                android:text="Delete record"
+                android:textSize="14sp"
+                android:textColor="@color/white"/>
 
         </LinearLayout>
     </ScrollView>
@@ -205,27 +334,42 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center">
+        android:gravity="center"
+        android:background="@drawable/bottombar">
 
         <Button
             android:id="@+id/settingsButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/button"
+            android:padding="10dp"
+            android:layout_marginRight="5dp"
             android:onClick="gotoSettings"
-            android:text="Settings" />
+            android:text="Settings"
+            android:textSize="14sp"
+            android:textColor="@color/white"/>
         <Button
             android:id="@+id/homeButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/button"
+            android:padding="10dp"
+            android:layout_marginRight="5dp"
             android:onClick="gotoHome"
-            android:text="Home" />
+            android:text="Home"
+            android:textSize="14sp"
+            android:textColor="@color/white"/>
 
         <Button
             android:id="@+id/allRecButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/button"
+            android:padding="10dp"
             android:onClick="gotoRecords"
-            android:text="All records" />
+            android:text="All records"
+            android:textSize="14sp"
+            android:textColor="@color/white"/>
     </LinearLayout>
 
 

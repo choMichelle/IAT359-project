@@ -60,7 +60,7 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
         SharedPreferences sharedPrefs = getSharedPreferences("MyData", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPrefs.edit();
         int genderSP = sharedPrefs.getInt("genderSP", 4);
-        int heightNumber = sharedPrefs.getInt("heightNumber", 160);
+        int heightNumber = sharedPrefs.getInt("height", 160);
 
         if (genderSP == 1) {
             Male.setChecked(true);
@@ -118,6 +118,8 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
 
         String ageInput = age.getText().toString();
         String heightInput = height.getText().toString();
+        editor.putInt("stride", stride);
+
 
         if (ageInput == null || ageInput.trim().equals("")) {
             Toast.makeText(this, "Sorry you did not fill in all the fields", Toast.LENGTH_SHORT).show();

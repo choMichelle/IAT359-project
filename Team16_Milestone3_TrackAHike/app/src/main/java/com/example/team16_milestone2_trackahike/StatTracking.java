@@ -80,8 +80,7 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
         super.onCreate(savedInstanceState);
         setContentView(R.layout.stat_tracking);
 
-        //initialize db
-        db = new MyDatabase(this);
+        db = new MyDatabase(this); //initialize db
 
         //get navigation buttons
         settingsButton = (Button) findViewById(R.id.settingsButton);
@@ -102,6 +101,7 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
         caloriesText = (TextView) findViewById(R.id.caloriesTextView);
         speedText = (TextView) findViewById(R.id.speedTextView);
 
+        //set key listeners for session name and group name edittexts
         sessionName.setOnKeyListener(onSoftKeyboardDonePress);
         sessionCategory.setOnKeyListener(onSoftKeyboardDonePress);
 
@@ -543,8 +543,9 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
     //get out of name/group name edit text after done typing
     private View.OnKeyListener onSoftKeyboardDonePress = new View.OnKeyListener() {
         public boolean onKey(View view, int keyCode, KeyEvent event) {
+            //check if the enter key is tapped
             if (event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
-                //hide keyboard after hitting enter
+                //unfocus from edit text after hitting enter
                 sessionName.clearFocus();
                 sessionCategory.clearFocus();
             }

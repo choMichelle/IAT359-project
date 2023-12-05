@@ -330,7 +330,9 @@
                     android:padding="10dp"
                     android:layout_marginRight="20dp"
                     android:layout_gravity="center"
-                    android:text="Take photo" />
+                    android:text="Take photo"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"/>
 
             </LinearLayout>
 

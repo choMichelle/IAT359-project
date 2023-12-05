@@ -47,6 +47,7 @@
             android:padding="10dp"
             android:text="Filter"
             android:textSize="14sp"
+            android:textColor="@color/white"
             android:onClick="filterRecords"/>
     </LinearLayout>
 

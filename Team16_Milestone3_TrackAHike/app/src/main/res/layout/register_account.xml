@@ -6,6 +6,19 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/textView7"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/pagetitle"
+        android:gravity="start|center_vertical"
+        android:textColor="@color/white"
+        android:text="Track a Hike"
+        android:textSize="30dp"
+        android:paddingLeft="20dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp" />
+
+    <TextView
         android:id="@+id/textView3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -31,9 +44,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="35dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginRight="35dp"
                 android:layout_marginBottom="20dp"
-                android:layout_marginTop="20dp"
                 android:background="@drawable/settings_container"
                 android:orientation="vertical"
                 android:padding="10dp">
@@ -93,6 +106,7 @@
                 </LinearLayout>
 
             </LinearLayout>
+
             <Button
                 android:id="@+id/registerButton"
                 android:layout_width="wrap_content"

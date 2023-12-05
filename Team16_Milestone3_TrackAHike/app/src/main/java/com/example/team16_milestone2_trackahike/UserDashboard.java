@@ -77,33 +77,34 @@ public class UserDashboard extends Activity implements View.OnClickListener {
         Cursor cursor = db.getData(); //get all record data
 
         cursor.moveToLast(); //go to last exercise session
+        if (cursor != null && cursor.getCount() > 0) { //check if there are any records
+            //get relevant indices for the exercise session
+            int index0 = cursor.getColumnIndex(Constants.UID);
+            int index1 = cursor.getColumnIndex(Constants.NAME);
+            int index2 = cursor.getColumnIndex(Constants.CATEGORY);
 
-        //get relevant indices for the exercise session
-        int index0 = cursor.getColumnIndex(Constants.UID);
-        int index1 = cursor.getColumnIndex(Constants.NAME);
-        int index2 = cursor.getColumnIndex(Constants.CATEGORY);
+            //get saved data for the exercise session
+            recordID = cursor.getString(index0);
+            String recName = cursor.getString(index1);
+            String groupName = cursor.getString(index2);
 
-        //get saved data for the exercise session
-        recordID = cursor.getString(index0);
-        String recName = cursor.getString(index1);
-        String groupName = cursor.getString(index2);
+            //set name and group name text
+            recordNameText.setText(recName);
+            recordGroupText.setText(groupName);
 
-        //set name and group name text
-        recordNameText.setText(recName);
-        recordGroupText.setText(groupName);
+            //get a photo for the record preview
+            Cursor photoCursor = db.getPhotos(recordID);
+            int photoBytesIndex = photoCursor.getColumnIndex(Constants.PHOTO_CONTENT);
 
-        //get a photo for the record preview
-        Cursor photoCursor = db.getPhotos(recordID);
-        int photoBytesIndex = photoCursor.getColumnIndex(Constants.PHOTO_CONTENT);
-
-        photoCursor.moveToFirst(); //go to the first image
-        if (photoCursor != null && photoCursor.getCount() > 0) { //check if there are any photos
-            byte[] photoBytes = photoCursor.getBlob(photoBytesIndex); //get photo byte array
-            Bitmap photoBitmap = Utility.toBitmap(photoBytes); //convert byte array to bitmap;
-            previewPhoto.setImageBitmap(photoBitmap); //set photo to imageview
-        }
-        else {
-            previewPhoto.setImageDrawable(img_placeholder);
+            photoCursor.moveToFirst(); //go to the first image
+            if (photoCursor != null && photoCursor.getCount() > 0) { //check if there are any photos
+                byte[] photoBytes = photoCursor.getBlob(photoBytesIndex); //get photo byte array
+                Bitmap photoBitmap = Utility.toBitmap(photoBytes); //convert byte array to bitmap;
+                previewPhoto.setImageBitmap(photoBitmap); //set photo to imageview
+            }
+            else {
+                previewPhoto.setImageDrawable(img_placeholder);
+            }
         }
 
     }

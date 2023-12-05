@@ -104,7 +104,7 @@
                             android:id="@+id/previewRecNameText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="TextView"
+                            android:text="No record"
                             android:textColor="@color/white"
                             android:textSize="20sp" />
 
@@ -112,7 +112,7 @@
                             android:id="@+id/previewGroupNameText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="TextView"
+                            android:text="no group"
                             android:textColor="@color/white"
                             android:textSize="16sp" />
                     </LinearLayout>

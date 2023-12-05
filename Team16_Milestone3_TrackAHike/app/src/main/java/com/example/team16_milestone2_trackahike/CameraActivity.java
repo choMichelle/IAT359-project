@@ -70,20 +70,7 @@ public class CameraActivity extends Activity implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         Intent camera_intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-//        //check if the intent can be handled
-//        PackageManager packageManager = getPackageManager();
-//        List<ResolveInfo> activities = packageManager.queryIntentActivities(camera_intent, 0);
-//        boolean isIntentSafe = activities.size() > 0;
-//
-//        //start activity if safe
-//        if (isIntentSafe) {
-            startActivityForResult(camera_intent, REQUEST_CODE);
-//        }
-//        else {
-//            Toast.makeText(this, "No camera available", Toast.LENGTH_SHORT).show();
-//        }
-
+        startActivityForResult(camera_intent, REQUEST_CODE);
     }
 
     //navigate to settings activity

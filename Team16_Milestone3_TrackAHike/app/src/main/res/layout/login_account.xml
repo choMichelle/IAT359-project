@@ -19,19 +19,6 @@
         android:paddingBottom="10dp"
         android:layout_marginBottom="20dp"/>
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/onerec_groupname"
-        android:gravity="start|center_vertical"
-        android:textColor="@color/white"
-        android:text="Log in to your User Profile"
-        android:textSize="16sp"
-        android:paddingLeft="20dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp" />
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -40,6 +27,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/onerec_groupname"
+                android:gravity="start|center_vertical"
+                android:textColor="@color/white"
+                android:text="Log in to your User Profile"
+                android:textSize="16sp"
+                android:paddingLeft="20dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"

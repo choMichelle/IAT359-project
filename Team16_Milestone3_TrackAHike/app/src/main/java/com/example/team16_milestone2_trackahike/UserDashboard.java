@@ -7,6 +7,8 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.media.AudioManager;
+import android.media.ToneGenerator;
 import android.os.Bundle;
 import android.util.Base64;
 import android.view.View;
@@ -37,6 +39,9 @@ public class UserDashboard extends Activity implements View.OnClickListener {
     private Drawable img_placeholder; //placeholder for 'empty' imageviews
 
     private MyDatabase db; //database
+
+    //tone generator for sound feedback
+    private final ToneGenerator mToneGen = new ToneGenerator(AudioManager.STREAM_MUSIC,100);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,6 +139,7 @@ public class UserDashboard extends Activity implements View.OnClickListener {
 
     //on click, go to the specific record shown in the preview of the last record
     public void accessLastRecord(View view) {
+        mToneGen.startTone(ToneGenerator.TONE_PROP_BEEP); //beep sound feedback
         Intent i = new Intent(this, SpecificRecord.class);
         i.putExtra("recordID", recordID);
         startActivity(i);
@@ -141,18 +147,21 @@ public class UserDashboard extends Activity implements View.OnClickListener {
 
     //navigate to tracking activity
     public void gotoTracking(View view) {
+        mToneGen.startTone(ToneGenerator.TONE_PROP_BEEP); //beep sound feedback
         Intent i = new Intent(this, StatTracking.class);
         startActivity(i);
     }
 
     //navigate to settings activity
     public void gotoSettings(View view){
+        mToneGen.startTone(ToneGenerator.TONE_PROP_BEEP); //beep sound feedback
         Intent i = new Intent(this, Settings.class);
         startActivity(i);
     }
 
     //navigate to all records activity
     public void gotoRecords(View view) {
+        mToneGen.startTone(ToneGenerator.TONE_PROP_BEEP); //beep sound feedback
         Intent i = new Intent(this, AllRecords.class);
         startActivity(i);
     }

@@ -7,6 +7,8 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
+import android.media.AudioManager;
+import android.media.ToneGenerator;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
@@ -42,6 +44,9 @@ public class CameraActivity extends Activity implements View.OnClickListener {
     private int REQUEST_CODE_PERMISSIONS = 1001;
     private final String[] REQUIRED_PERMISSIONS = new String[]{"android.permission.CAMERA"};
 
+    //tone generator for sound feedback
+    private final ToneGenerator mToneGen = new ToneGenerator(AudioManager.STREAM_MUSIC,100);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,12 +74,14 @@ public class CameraActivity extends Activity implements View.OnClickListener {
     //on clicking open camera button, opens device's camera
     @Override
     public void onClick(View view) {
+        mToneGen.startTone(ToneGenerator.TONE_PROP_BEEP); //beep sound feedback
         Intent camera_intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(camera_intent, REQUEST_CODE);
     }
 
     //navigate to settings activity
     public void gotoSettings(View view){
+        mToneGen.startTone(ToneGenerator.TONE_PROP_BEEP); //beep sound feedback
         Intent i = new Intent(this, Settings.class);
         startActivity(i);
     }

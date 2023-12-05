@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.AudioManager;
+import android.media.ToneGenerator;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -15,6 +17,9 @@ import android.widget.Toast;
 public class RegisterAccount extends Activity implements View.OnClickListener {
     private EditText usernameEditText, passwordEditText;
     private Button registerButton;
+
+    //tone generator for sound feedback
+    private final ToneGenerator mToneGen = new ToneGenerator(AudioManager.STREAM_MUSIC,100);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +44,8 @@ public class RegisterAccount extends Activity implements View.OnClickListener {
         editor.putString("password", passwordEditText.getText().toString());
         Toast.makeText(this, "Username and password saved to Preferences", Toast.LENGTH_SHORT).show();
         editor.commit();
+
+        mToneGen.startTone(ToneGenerator.TONE_PROP_BEEP); //beep sound feedback
 
         //redirect to login activity
         Intent i = new Intent(this, LoginAccount.class);

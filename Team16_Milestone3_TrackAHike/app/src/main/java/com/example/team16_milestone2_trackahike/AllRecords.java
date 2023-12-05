@@ -3,6 +3,8 @@ package com.example.team16_milestone2_trackahike;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
+import android.media.AudioManager;
+import android.media.ToneGenerator;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -25,6 +27,9 @@ public class AllRecords extends Activity {
     private MyDatabase db; //database
     private EditText filterEntry; //input field for filtering
     private Button trackButton, settingsButton, dashboardButton; //navigation buttons
+
+    //tone generator for sound feedback
+    private final ToneGenerator mToneGen = new ToneGenerator(AudioManager.STREAM_MUSIC,100);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +91,8 @@ public class AllRecords extends Activity {
         //get user input text
         String groupNameQuery = filterEntry.getText().toString();
 
+        mToneGen.startTone(ToneGenerator.TONE_PROP_BEEP); //beep sound feedback
+
         //start allrecords activity (this activity) again with the filter criteria
         Intent i = new Intent(this, AllRecords.class);
         i.putExtra("group", groupNameQuery);
@@ -94,18 +101,21 @@ public class AllRecords extends Activity {
 
     //navigate to tracking activity
     public void gotoTracking(View view) {
+        mToneGen.startTone(ToneGenerator.TONE_PROP_BEEP); //beep sound feedback
         Intent i = new Intent(this, StatTracking.class);
         startActivity(i);
     }
 
     //navigate to settings activity
     public void gotoSettings(View view){
+        mToneGen.startTone(ToneGenerator.TONE_PROP_BEEP); //beep sound feedback
         Intent i = new Intent(this, Settings.class);
         startActivity(i);
     }
 
     //navigate to dashboard
     public void gotoHome(View view) {
+        mToneGen.startTone(ToneGenerator.TONE_PROP_BEEP); //beep sound feedback
         Intent i = new Intent(this, UserDashboard.class);
         startActivity(i);
     }

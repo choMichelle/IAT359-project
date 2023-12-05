@@ -12,6 +12,8 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.AudioManager;
+import android.media.ToneGenerator;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.MediaStore;
@@ -60,6 +62,9 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
     //step sensor variables
     private SensorManager mSensorManager;
     private Sensor mStepCounter;
+
+    //tone generator for sound feedback
+    private final ToneGenerator mToneGen = new ToneGenerator(AudioManager.STREAM_MUSIC,100);
 
     private MyDatabase db; //database
 
@@ -287,12 +292,15 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
 
     //on pause button press
     private void pauseTracking(View view) {
+        mToneGen.startTone(ToneGenerator.TONE_PROP_BEEP); //beep sound feedback
         isRunning = false;
         startBtn.setText("Resume tracking");
     }
 
     //on save button press, save session stats and photos
     private void saveSession(View view) {
+        mToneGen.startTone(ToneGenerator.TONE_PROP_BEEP); //beep sound feedback
+
         //get the tracking variables to save
         String name = sessionName.getText().toString(); //name of session
         String category = sessionCategory.getText().toString().toLowerCase(); //group name
@@ -363,6 +371,8 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
 
     //on reset button press, reset all variables and views
     private void resetTracking(View view) {
+        mToneGen.startTone(ToneGenerator.TONE_PROP_BEEP); //beep sound feedback
+
         //reset name, group name text
         sessionName.setText("");
         sessionCategory.setText("");
@@ -435,6 +445,7 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
             timerThread.start(); //start separate thread for timer and calculations
             startBtn.setText("Tracking...");
             recordStarted = true;
+            mToneGen.startTone(ToneGenerator.TONE_PROP_BEEP); //beep sound feedback
         }
     }
 
@@ -486,6 +497,7 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
     //on take photo button press, move to device's camera app
     public void openCamera(View view) {
         if (isRunning) {
+            mToneGen.startTone(ToneGenerator.TONE_PROP_BEEP); //beep sound feedback
             Intent camera_intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             startActivityForResult(camera_intent, REQUEST_CODE);
         }
@@ -537,18 +549,21 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
 
     //navigate to settings activity
     public void gotoSettings(View view){
+        mToneGen.startTone(ToneGenerator.TONE_PROP_BEEP); //beep sound feedback
         Intent i = new Intent(this, Settings.class);
         startActivity(i);
     }
 
     //navigate to dashboard activity
     public void gotoHome(View view) {
+        mToneGen.startTone(ToneGenerator.TONE_PROP_BEEP); //beep sound feedback
         Intent i = new Intent(this, UserDashboard.class);
         startActivity(i);
     }
 
     //navigate to all records activity
     public void gotoRecords(View view) {
+        mToneGen.startTone(ToneGenerator.TONE_PROP_BEEP); //beep sound feedback
         Intent i = new Intent(this, AllRecords.class);
         startActivity(i);
     }

@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.media.AudioManager;
+import android.media.ToneGenerator;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -24,6 +26,9 @@ public class SpecificRecord extends Activity implements View.OnClickListener {
             imgView3, imgView4, imgView5; //views to display saved photos
     private ImageView[] imgViews; //holds all imageviews for easy retrieval
     private MyDatabase db; //database
+
+    //tone generator for sound feedback
+    private final ToneGenerator mToneGen = new ToneGenerator(AudioManager.STREAM_MUSIC,100);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,24 +164,28 @@ public class SpecificRecord extends Activity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         db.deleteRecord(recordID);
+        mToneGen.startTone(ToneGenerator.TONE_PROP_BEEP); //beep sound feedback
         Intent i = new Intent(this, AllRecords.class);
         startActivity(i);
     }
 
     //navigate to settings activity
     public void gotoSettings(View view){
+        mToneGen.startTone(ToneGenerator.TONE_PROP_BEEP); //beep sound feedback
         Intent i = new Intent(this, Settings.class);
         startActivity(i);
     }
 
     //navigate to dashboard activity
     public void gotoHome(View view) {
+        mToneGen.startTone(ToneGenerator.TONE_PROP_BEEP); //beep sound feedback
         Intent i = new Intent(this, UserDashboard.class);
         startActivity(i);
     }
 
     //navigate to all records activity
     public void gotoRecords(View view) {
+        mToneGen.startTone(ToneGenerator.TONE_PROP_BEEP); //beep sound feedback
         Intent i = new Intent(this, AllRecords.class);
         startActivity(i);
     }

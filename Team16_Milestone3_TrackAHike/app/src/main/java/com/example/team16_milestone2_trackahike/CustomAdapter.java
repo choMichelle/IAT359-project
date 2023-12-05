@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.media.AudioManager;
 import android.media.Image;
+import android.media.ToneGenerator;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -91,6 +93,9 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         public String recordID;
         private String img_placeholder_path = "@drawable/no_image"; //path to placeholder image
         private Drawable img_placeholder; //placeholder for 'empty' imageviews
+
+        //tone generator for sound feedback
+        private final ToneGenerator mToneGen = new ToneGenerator(AudioManager.STREAM_MUSIC,100);
         private MyDatabase db;
         Context context;
 
@@ -118,6 +123,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         //redirect to specific record activity on clicking a record
         @Override
         public void onClick(View view) {
+            mToneGen.startTone(ToneGenerator.TONE_PROP_BEEP); //beep sound feedback
             Intent i = new Intent(context, SpecificRecord.class);
             i.putExtra("recordID", recordID);
             context.startActivity(i);

@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.AudioManager;
+import android.media.ToneGenerator;
 import android.os.Bundle;
 import android.util.Base64;
 import android.view.View;
@@ -33,6 +35,9 @@ public class Settings extends Activity implements View.OnClickListener {
 
     public static final String DEFAULT = ""; //default value for retrieving some string data from sharedprefs
     private ImageView imageViewCaptured; //view to hold profile picture
+
+    //tone generator for sound feedback
+    private final ToneGenerator mToneGen = new ToneGenerator(AudioManager.STREAM_MUSIC,100);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +126,7 @@ public class Settings extends Activity implements View.OnClickListener {
 
     //on clicking change profile picture button
     public void onClick(View view) {
+        mToneGen.startTone(ToneGenerator.TONE_PROP_BEEP); //beep sound feedback
         Intent i = new Intent(this, CameraActivity.class);
         startActivity(i);
     }
@@ -163,6 +169,8 @@ public class Settings extends Activity implements View.OnClickListener {
             double calculatedKcalBurn = Utility.calcKcalPerStep(heightNumber, weightNumber);
             editor.putString("kcalBurnPerStep", String.valueOf(calculatedKcalBurn));
 
+            mToneGen.startTone(ToneGenerator.TONE_PROP_BEEP); //beep sound feedback
+
             editor.commit(); //save to sharedprefs
             Toast.makeText(this, "Settings have been saved", Toast.LENGTH_SHORT).show();
         }
@@ -182,23 +190,29 @@ public class Settings extends Activity implements View.OnClickListener {
         } else if (Other.isChecked()) {
             editor.putString("gender", "other");
         }
+
+        mToneGen.startTone(ToneGenerator.TONE_PROP_BEEP); //beep sound feedback
+
         editor.commit();
     }
 
     //navigate to tracking activity
     public void gotoTracking(View view) {
+        mToneGen.startTone(ToneGenerator.TONE_PROP_BEEP); //beep sound feedback
         Intent i = new Intent(this, StatTracking.class);
         startActivity(i);
     }
 
     //navigate to all records activity
     public void gotoRecords(View view) {
+        mToneGen.startTone(ToneGenerator.TONE_PROP_BEEP); //beep sound feedback
         Intent i = new Intent(this, AllRecords.class);
         startActivity(i);
     }
 
     //navigate to dashboard
     public void gotoHome(View view) {
+        mToneGen.startTone(ToneGenerator.TONE_PROP_BEEP); //beep sound feedback
         Intent i = new Intent(this, UserDashboard.class);
         startActivity(i);
     }

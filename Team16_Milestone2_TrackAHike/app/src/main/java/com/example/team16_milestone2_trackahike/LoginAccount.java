@@ -22,8 +22,11 @@ public class LoginAccount extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_account);
 
+        //get user input fields
         enteredUsername = (EditText) findViewById(R.id.usernameEditText);
         enteredPassword = (EditText) findViewById(R.id.passwordEditText);
+
+        //get log in button and set click listener
         loginButton = (Button) findViewById(R.id.loginButton);
         loginButton.setOnClickListener(this);
     }

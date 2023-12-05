@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,32 +13,38 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-//shows all of the user's records, allows user to filter by group name
+//shows all of the user's saved records from newest to oldest
+//allows user to filter by group name
 public class AllRecords extends Activity {
+
+    //variables used in creating the recyclerview
     private RecyclerView mRecycler;
     private CustomAdapter mCustomAdapter;
-    private MyDatabase db;
     private LinearLayoutManager layoutManager;
-    private EditText filterEntry;
-    private Button trackButton, settingsButton, dashboardButton;
+
+    private MyDatabase db; //database
+    private EditText filterEntry; //input field for filtering
+    private Button trackButton, settingsButton, dashboardButton; //navigation buttons
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.all_records);
-        mRecycler = (RecyclerView) findViewById(R.id.recyclerView);
+        mRecycler = (RecyclerView) findViewById(R.id.recyclerView); //get recyclerview
 
+        //get navigation buttons
         trackButton = (Button) findViewById(R.id.trackButton);
         settingsButton = (Button) findViewById(R.id.settingsButton);
         dashboardButton = (Button) findViewById(R.id.homeButton);
 
+        //set on click listeners for the navigation buttons
         trackButton.setOnClickListener(this::gotoTracking);
         settingsButton.setOnClickListener(this::gotoSettings);
         dashboardButton.setOnClickListener(this::gotoHome);
 
-        filterEntry = (EditText) findViewById(R.id.filterEntry); //user inputted filter criteria
+        filterEntry = (EditText) findViewById(R.id.filterEntry); //get user inputted filter criteria
 
-        db = new MyDatabase(this);
+        db = new MyDatabase(this); //initialize database
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -51,7 +56,7 @@ public class AllRecords extends Activity {
             mCustomAdapter = new CustomAdapter(filteredRecords);
         }
         else {
-            //get all record data
+            //get all record data (starting from newest)
             Cursor cursor = db.getData();
             cursor.moveToLast();
 
@@ -59,8 +64,9 @@ public class AllRecords extends Activity {
 
             while (!cursor.isBeforeFirst()) {
                 int index1 = cursor.getColumnIndex(Constants.UID);
-                String recordUID = cursor.getString(index1);
-                recordsArray.add(recordUID);
+                String recordUID = cursor.getString(index1); //retrieve record uid
+                recordsArray.add(recordUID); //add uid to dataset
+
                 cursor.moveToPrevious();
             }
 
@@ -68,8 +74,8 @@ public class AllRecords extends Activity {
             mCustomAdapter = new CustomAdapter(recordsArray);
         }
 
+        //set up recyclerview
         mRecycler.setAdapter(mCustomAdapter);
-
         layoutManager = new LinearLayoutManager(this);
         mRecycler.setLayoutManager(layoutManager);
 
@@ -86,16 +92,19 @@ public class AllRecords extends Activity {
         startActivity(i);
     }
 
+    //navigate to tracking activity
     public void gotoTracking(View view) {
         Intent i = new Intent(this, StatTracking.class);
         startActivity(i);
     }
 
+    //navigate to settings activity
     public void gotoSettings(View view){
         Intent i = new Intent(this, Settings.class);
         startActivity(i);
     }
 
+    //navigate to dashboard
     public void gotoHome(View view) {
         Intent i = new Intent(this, UserDashboard.class);
         startActivity(i);

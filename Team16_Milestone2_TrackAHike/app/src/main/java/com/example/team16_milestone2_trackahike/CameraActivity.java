@@ -31,7 +31,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-//
+//allows user to open their device's camera to take photo for their profile picture
 public class CameraActivity extends Activity implements View.OnClickListener {
 
     private Button buttonCaptureShow, backButton; //navigation buttons
@@ -61,7 +61,7 @@ public class CameraActivity extends Activity implements View.OnClickListener {
         //check for permissions
         if (allPermissionsGranted()) {
             //do nothing
-        } else { //directly request permissions
+        } else { //directly request permissions if not granted
             ActivityCompat.requestPermissions(this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS);
         }
     }
@@ -104,10 +104,7 @@ public class CameraActivity extends Activity implements View.OnClickListener {
             SharedPreferences sharedPrefs = getSharedPreferences("MyData", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPrefs.edit();
 
-            //compress image into byte[]
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            photo.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-            byte[] compressImage = baos.toByteArray();
+            byte[] compressImage = Utility.toBytes(photo); //compress image into byte[]
 
             //encode photo into a string
             String sEncodedImage = Base64.encodeToString(compressImage, Base64.DEFAULT);

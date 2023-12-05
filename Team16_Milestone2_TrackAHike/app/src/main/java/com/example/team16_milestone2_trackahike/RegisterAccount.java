@@ -21,8 +21,11 @@ public class RegisterAccount extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register_account);
 
+        //get user input fields
         usernameEditText = (EditText) findViewById(R.id.usernameEditText);
         passwordEditText = (EditText) findViewById(R.id.passwordEditText);
+
+        //get register button and set on click listener
         registerButton = (Button) findViewById(R.id.registerButton);
         registerButton.setOnClickListener(this);
     }

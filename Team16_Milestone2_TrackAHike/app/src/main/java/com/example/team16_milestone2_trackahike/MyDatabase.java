@@ -20,7 +20,7 @@ public class MyDatabase {
 
     }
 
-    //add record into db (records table)
+    //add exercise session stats into db (records table)
     public long insertData(String name, String seconds, String steps, String distance,
                            String calories, String speed, String category) {
         db = helper.getWritableDatabase();
@@ -75,7 +75,7 @@ public class MyDatabase {
         return filteredResults;
     }
 
-    //get all photos related to the selected exercise record
+    //get all photos related to the selected exercise record via record ID
     public Cursor getPhotos(String recordID) {
         SQLiteDatabase db = helper.getWritableDatabase();
         String[] columns = {Constants.PHOTO_CONTENT, Constants.RECORD_ID};
@@ -86,7 +86,7 @@ public class MyDatabase {
         return cursor;
     }
 
-    //delete selected record from db
+    //delete selected record and its photos from db
     public void deleteRecord(String currentRecordID) {
         SQLiteDatabase db = helper.getWritableDatabase();
         db.delete(Constants.TABLE_NAME, "_id=?", new String[]{currentRecordID});

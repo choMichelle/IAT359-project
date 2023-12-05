@@ -1,9 +1,10 @@
 package com.example.team16_milestone2_trackahike;
 
+//holds constants used interacting with the database
 public class Constants {
     public static final String DATABASE_NAME = "recordsdatabase";
 
-    //constants for the exercise sessions table
+    //constants for the exercise sessions records table (stats)
     public static final String TABLE_NAME = "recordstable";
     public static final String UID = "_id";
     public static final String NAME = "name";

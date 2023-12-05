@@ -6,7 +6,7 @@ import android.graphics.BitmapFactory;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-//holds useful functions for converting photos for save/display purposes
+//holds useful functions for use in any activity
 public class Utility {
 
     //convert from bitmap to byte array (for saving the photo)

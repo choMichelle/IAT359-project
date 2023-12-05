@@ -39,7 +39,6 @@
             android:textSize="14sp" />
     </LinearLayout>
 
-
     <TextView
         android:id="@+id/textView10"
         android:layout_width="match_parent"

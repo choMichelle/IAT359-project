@@ -18,20 +18,20 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+//allows user to edit personal metrics (which are used to calculate some tracked stats)
+//and change their profile picture
 public class Settings extends Activity implements View.OnClickListener {
 
     private Button buttonStartCamera; //button to open camera (for taking a profile picture)
     private EditText firstName, age, height, weight; //text input fields for user info
     private Button submitButton; //button to save user info
-
     private Button trackButton, allRecordsButton, dashboardButton; //navigation buttons
 
     //change gender radio buttons
     private RadioGroup Gender;
     private RadioButton Male, Female, Other;
 
-    public static final String DEFAULT = "";
-
+    public static final String DEFAULT = ""; //default value for retrieving some string data from sharedprefs
     private ImageView imageViewCaptured; //view to hold profile picture
 
     @Override
@@ -61,7 +61,7 @@ public class Settings extends Activity implements View.OnClickListener {
         //get view to hold profile picture
         imageViewCaptured = (ImageView) findViewById(R.id.imageViewCapturedImg);
 
-        //get saved user info
+        //get saved user info from sharedprefs
         SharedPreferences sharedPrefs = getSharedPreferences("MyData", Context.MODE_PRIVATE);
         String savedName = sharedPrefs.getString("name", DEFAULT);
         int savedAge = sharedPrefs.getInt("age", 20);
@@ -105,35 +105,40 @@ public class Settings extends Activity implements View.OnClickListener {
         super.onResume();
         SharedPreferences sharedPrefs = getSharedPreferences("MyData", Context.MODE_PRIVATE);
 
+        //check if a profile picture has been saved to sharedprefs
         if (sharedPrefs.contains("imageViewCapturedImg")) {
-
+            //retrieve the encoded photo
             String encodedImage = sharedPrefs.getString("imageViewCapturedImg", null);
 
+            //decode the photo and convert to bitmap
             byte[] b = Base64.decode(encodedImage, Base64.DEFAULT);
-
             Bitmap bitmapImage = Utility.toBitmap(b);
-            imageViewCaptured.setImageBitmap(bitmapImage);
+
+            imageViewCaptured.setImageBitmap(bitmapImage); //set photo to the imageview
         }
 
     }
 
+    //on clicking change profile picture button
     public void onClick(View view) {
         Intent i = new Intent(this, CameraActivity.class);
         startActivity(i);
     }
 
-
+    //on clicking the submit button, save to preferences
     public void submit(View view) {
         SharedPreferences sharedPrefs = getSharedPreferences("MyData", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPrefs.edit();
 
-        String savedGender = sharedPrefs.getString("gender", DEFAULT); //get saved gender, if any
+        //get saved gender from sharedprefs, if any
+        String savedGender = sharedPrefs.getString("gender", DEFAULT);
 
+        //retrieve personal metrics inputs
         String ageInput = age.getText().toString();
         String heightInput = height.getText().toString();
         String weightInput = weight.getText().toString();
 
-        //check if age, height, weight, and gender input fields were filled
+        //check if age, height, weight, and gender input fields were filled (name is optional)
         if (ageInput.trim().equals("") || heightInput.trim().equals("") ||
                 weightInput.trim().equals("") || savedGender.equals(DEFAULT)) {
             Toast.makeText(this, "Sorry you did not fill in all the fields", Toast.LENGTH_SHORT).show();
@@ -158,8 +163,8 @@ public class Settings extends Activity implements View.OnClickListener {
             double calculatedKcalBurn = Utility.calcKcalPerStep(heightNumber, weightNumber);
             editor.putString("kcalBurnPerStep", String.valueOf(calculatedKcalBurn));
 
+            editor.commit(); //save to sharedprefs
             Toast.makeText(this, "Settings have been saved", Toast.LENGTH_SHORT).show();
-            editor.commit();
         }
 
     }
@@ -180,16 +185,19 @@ public class Settings extends Activity implements View.OnClickListener {
         editor.commit();
     }
 
+    //navigate to tracking activity
     public void gotoTracking(View view) {
         Intent i = new Intent(this, StatTracking.class);
         startActivity(i);
     }
 
+    //navigate to all records activity
     public void gotoRecords(View view) {
         Intent i = new Intent(this, AllRecords.class);
         startActivity(i);
     }
 
+    //navigate to dashboard
     public void gotoHome(View view) {
         Intent i = new Intent(this, UserDashboard.class);
         startActivity(i);

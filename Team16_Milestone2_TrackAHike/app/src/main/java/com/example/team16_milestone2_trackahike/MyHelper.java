@@ -24,7 +24,7 @@ public class MyHelper extends SQLiteOpenHelper {
                     Constants.SPEED + " TEXT, " +
                     Constants.CATEGORY + " TEXT);" ;
 
-    //creates table to hold photos related to each exercise record
+    //creates table to hold photos related to each exercise record by recordID
     private static final String CREATE_PHOTOS_TABLE =
             "CREATE TABLE "+
                     Constants.PHOTOS_TABLE_NAME + " (" +

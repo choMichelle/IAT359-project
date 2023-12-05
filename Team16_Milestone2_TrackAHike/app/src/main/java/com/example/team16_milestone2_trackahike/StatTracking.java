@@ -12,7 +12,6 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.media.Image;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.MediaStore;
@@ -24,15 +23,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import java.util.ArrayList;
-import java.util.Locale;
 
-//starts, pauses, and saves tracking data
+//starts, pauses, and saves tracking data and photos
 public class StatTracking extends Activity implements View.OnClickListener, SensorEventListener {
 
     //variables to hold/track stats
@@ -70,22 +65,24 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
 
     //used to check for and request step detector and camera permissions
     private int REQUEST_CODE_PERMISSIONS = 1001;
-    private final String[] REQUIRED_PERMISSIONS = new String[]{"android.permission.ACTIVITY_RECOGNITION", "android.permission.CAMERA"};
+    private final String[] REQUIRED_PERMISSIONS = new String[]{
+            "android.permission.ACTIVITY_RECOGNITION",
+            "android.permission.CAMERA"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.stat_tracking);
 
-        //instantiate db
+        //initialize db
         db = new MyDatabase(this);
 
-        //get move between activities buttons (bottom bar of buttons)
+        //get navigation buttons
         settingsButton = (Button) findViewById(R.id.settingsButton);
         dashboardButton = (Button) findViewById(R.id.homeButton);
         allRecordsButton = (Button) findViewById(R.id.allRecButton);
 
-        //set click listeners for bottom bar of buttons
+        //set click listeners for navigation buttons
         settingsButton.setOnClickListener(this::gotoSettings);
         dashboardButton.setOnClickListener(this::gotoHome);
         allRecordsButton.setOnClickListener(this::gotoRecords);
@@ -119,10 +116,10 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
         imgView4 = (ImageView) findViewById(R.id.imageView4);
         imgView5 = (ImageView) findViewById(R.id.imageView5);
 
-        //add each image view to an array
+        //add each imageview to an array
         imgViews = new ImageView[]{imgView0, imgView1, imgView2, imgView3, imgView4, imgView5};
 
-        //get the placeholder image
+        //get the placeholder image resource
         int imageResource = getResources().getIdentifier(img_placeholder_path, null, getPackageName());
         img_placeholder = getResources().getDrawable(imageResource);
 
@@ -159,6 +156,28 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
             //set photo variables
             img_id = savedInstanceState.getInt("imgID");
             totalImgs = savedInstanceState.getInt("totalImgs");
+
+            //reload temporarily saved photos
+            if (img_id > 0 || totalImgs == 6) {
+                if (totalImgs == 6) { //for when 7+ photos were taken
+                    for (int i = 0; i < totalImgs; i++) {
+                        //retrieve photo byte array
+                        byte[] photoByteArray = savedInstanceState.getByteArray("photo" + i);
+                        Bitmap photoBitmap = Utility.toBitmap(photoByteArray); //convert to bitmap
+
+                        imgViews[i].setImageBitmap(photoBitmap); //set photo in imageview
+                    }
+                }
+                else {
+                    for (int i = 0; i < img_id; i++) {
+                        //retrieve photo byte array
+                        byte[] photoByteArray = savedInstanceState.getByteArray("photo" + i);
+                        Bitmap photoBitmap = Utility.toBitmap(photoByteArray); //convert to bitmap
+
+                        imgViews[i].setImageBitmap(photoBitmap); //set photo in imageview
+                    }
+                }
+            }
 
             //format and set text for timer
             int hrs = seconds / 3600;
@@ -210,6 +229,31 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
         //save photo state variables
         savedInstanceState.putInt("imgID", img_id);
         savedInstanceState.putInt("totalImgs", totalImgs);
+
+        //prepare photos to be temporarily saved (convert bitmaps to byte arrays)
+        if (img_id > 0 || totalImgs == 6) {
+
+            //loop through all photos to be saved, for when 7+ photos have been taken (some overwritten)
+            if (totalImgs == 6) {
+                for (int i = 0; i < totalImgs; i++) {
+                    ImageView currentPhoto = imgViews[i];
+                    BitmapDrawable photoBitmap = (BitmapDrawable) currentPhoto.getDrawable();
+                    byte[] photoBytes = Utility.toBytes(photoBitmap.getBitmap());
+
+                    savedInstanceState.putByteArray("photo" + i, photoBytes); //save photo
+                }
+            } else {
+                //loop through all photos to be saved
+                for (int i = 0; i < img_id; i++) {
+                    ImageView currentPhoto = imgViews[i];
+                    BitmapDrawable photoBitmap = (BitmapDrawable) currentPhoto.getDrawable();
+                    byte[] photoBytes = Utility.toBytes(photoBitmap.getBitmap());
+
+                    savedInstanceState.putByteArray("photo" + i, photoBytes); //save photo
+                }
+            }
+        }
+
     }
 
     @Override
@@ -247,9 +291,9 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
         startBtn.setText("Resume tracking");
     }
 
-    //on save button press, save session stats and details
+    //on save button press, save session stats and photos
     private void saveSession(View view) {
-        //get the variables to save
+        //get the tracking variables to save
         String name = sessionName.getText().toString(); //name of session
         String category = sessionCategory.getText().toString().toLowerCase(); //group name
         String time = String.valueOf(seconds); //time in seconds
@@ -258,7 +302,7 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
         String calories = String.valueOf(caloriesBurned); //calories burned (calculated)
         String speed = String.valueOf(moveSpeed); //movement speed (calculated)
 
-        //boolean to check if data can be saved
+        //boolean to check if data should be saved
         boolean canSave;
 
         //check if the conditions to save are met
@@ -276,48 +320,32 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
 
         //save data
         if (canSave) {
-            long recordID = db.insertData(name, time, steps, distance, calories, speed, category); //save stats data to db, records table
+            //save stats data to db - records table
+            long recordID = db.insertData(name, time, steps, distance, calories, speed, category);
 
             //check if a photo has been taken
-            //(ex. img_id would =1 if 1 photo has been taken)
+            //(ex. img_id would = 1 if 1 photo has been taken)
             if (img_id > 0 || totalImgs == 6) {
-                if (totalImgs == 6) {
+                if (totalImgs == 6) { //for when 7+ photos are taken (overwritten some)
                     for (int i = 0; i < totalImgs; i++) { //loop through all photos to be saved
+                        //retrieve photo and convert bitmap to byte array
                         ImageView currentPhoto = imgViews[i];
                         BitmapDrawable photoBitmap = (BitmapDrawable) currentPhoto.getDrawable();
                         byte[] photoBytes = Utility.toBytes(photoBitmap.getBitmap());
-                        long photoID = db.insertPhotos(photoBytes, String.valueOf(recordID));
 
-                        //toast result - success/failure to add to db
-                        if (photoID < 0)
-                        {
-                            Toast.makeText(this, "photos add to db fail", Toast.LENGTH_SHORT).show();
-                        }
-                        else
-                        {
-                            Toast.makeText(this, "photos add to db success", Toast.LENGTH_SHORT).show();
-                        }
+                        db.insertPhotos(photoBytes, String.valueOf(recordID)); //save photo to db
                     }
                 }
                 else {
                     for (int i = 0; i < img_id; i++) { //loop through all photos to be saved
+                        //retrieve photo and convert bitmap to byte array
                         ImageView currentPhoto = imgViews[i];
                         BitmapDrawable photoBitmap = (BitmapDrawable) currentPhoto.getDrawable();
                         byte[] photoBytes = Utility.toBytes(photoBitmap.getBitmap());
-                        long photoID = db.insertPhotos(photoBytes, String.valueOf(recordID));
 
-                        //toast result - success/failure to add to db
-                        if (photoID < 0)
-                        {
-                            Toast.makeText(this, "photos add to db fail", Toast.LENGTH_SHORT).show();
-                        }
-                        else
-                        {
-                            Toast.makeText(this, "photos add to db success", Toast.LENGTH_SHORT).show();
-                        }
+                        db.insertPhotos(photoBytes, String.valueOf(recordID)); //save photo to db
                     }
                 }
-
             }
 
             //toast result - success/failure to add to db
@@ -333,6 +361,7 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
         }
     }
 
+    //on reset button press, reset all variables and views
     private void resetTracking(View view) {
         //reset name, group name text
         sessionName.setText("");
@@ -361,7 +390,7 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
         img_id = 0;
         totalImgs = 0;
 
-        //loop through all image views and replace with placeholders
+        //loop through all photo imageviews and replace with placeholders
         for (ImageView i : imgViews) {
             i.setImageDrawable(img_placeholder);
         }
@@ -377,20 +406,21 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
             int mins = (seconds % 3600) / 60;
             int secs = seconds % 60;
 
+            //calculate other stats
             calculateStats(seconds, totalSteps);
 
-            //update timer text on UI thread
+            //update stats text on UI thread
             this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     timeText.setText(hrs + ":" + mins + ":" + secs);
                     distanceText.setText(String.format("%.2f", totalDistance) + " km");
-                    caloriesText.setText(String.format("%.2f", caloriesBurned) + " kcal");
+                    caloriesText.setText(String.format("%.3f", caloriesBurned) + " kcal");
                     speedText.setText(String.format("%.3f", moveSpeed) + " km/s");
                 }
             });
 
-            //update timer every second
+            //sleep to update timer/calculate every second
             SystemClock.sleep(1000);
             seconds++;
         }
@@ -402,7 +432,7 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
         if (!isRunning) {
             Thread timerThread = new Thread(new timeTrackingThread());
             isRunning = true;
-            timerThread.start(); //start separate thread for timer
+            timerThread.start(); //start separate thread for timer and calculations
             startBtn.setText("Tracking...");
             recordStarted = true;
         }
@@ -422,8 +452,18 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
         int savedStepLength = sharedPrefs.getInt("stepLength", 0); //get user's step length
         String savedKcalBurn = sharedPrefs.getString("kcalBurnPerStep", ""); //get user's kcal burn rate
 
-        double stepMetres = Utility.convertInchToMetre(savedStepLength); //convert step length to metres
-        double kcalBurnRate = Double.parseDouble(savedKcalBurn); //parse kcal burn rate to double
+        double stepMetres;
+        double kcalBurnRate;
+
+        //check if there is user data for step length and kcal burn rate
+        if (savedStepLength == 0 || savedKcalBurn.equals("")) {
+            stepMetres = 0; //set step length to 0
+            kcalBurnRate = 0; //set kcal rate to 0
+        }
+        else {
+            stepMetres = Utility.convertInchToMetre(savedStepLength); //convert step length to metres
+            kcalBurnRate = Double.parseDouble(savedKcalBurn); //parse kcal burn rate to double
+        }
 
         totalDistance = steps * stepMetres / 1000; //calculate distance in km
         caloriesBurned = steps * kcalBurnRate; //calculate calories burned in kcal
@@ -443,7 +483,7 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
 
     }
 
-    //on button press, move to device's camera app
+    //on take photo button press, move to device's camera app
     public void openCamera(View view) {
         if (isRunning) {
             Intent camera_intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -452,26 +492,26 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
         else {
             Toast.makeText(this, "Please start tracking first", Toast.LENGTH_SHORT).show();
         }
-
     }
 
+    //receive result from device's camera app
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        //check if a photo was taken
         if (data != null) {
             Bitmap photo = (Bitmap) data.getExtras().get("data");
 
             if (img_id < 6) {
-                ImageView view = imgViews[img_id];
-                view.setImageBitmap(photo);
+                ImageView view = imgViews[img_id]; //retrieve an imageview
+                view.setImageBitmap(photo); //set the photo to the imageview
                 img_id++;
             }
             if (img_id == 6) {
-                img_id = 0; //reset id to point at first photo, will overwrite old photos
-                totalImgs = 6;
+                img_id = 0; //reset id to point at first photo - will overwrite old photos
+                totalImgs = 6; //used to ensure all photos are processed and saved
             }
         }
-
-
     }
 
     @Override
@@ -495,16 +535,19 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
         return true;
     }
 
+    //navigate to settings activity
     public void gotoSettings(View view){
         Intent i = new Intent(this, Settings.class);
         startActivity(i);
     }
 
+    //navigate to dashboard activity
     public void gotoHome(View view) {
         Intent i = new Intent(this, UserDashboard.class);
         startActivity(i);
     }
 
+    //navigate to all records activity
     public void gotoRecords(View view) {
         Intent i = new Intent(this, AllRecords.class);
         startActivity(i);

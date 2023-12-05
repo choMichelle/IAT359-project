@@ -3,7 +3,6 @@ package com.example.team16_milestone2_trackahike;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,20 +10,20 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 //shows details of a single record
+//also shows associated photos, if any
 public class SpecificRecord extends Activity implements View.OnClickListener {
 
     private TextView recordNameText, recordedTimeText, recordedStepsText, recordedCategoryText,
             recordedDistanceText, recordedCaloriesText, recordedSpeedText; //views to hold record details
-    private String recordID; //holds UID of record being viewed
+    private String recordID; //holds ID of record being viewed
     private Button deleteButton; //delete record button
     private Button settingsButton, dashboardButton, allRecordsButton; //navigation buttons
     private ImageView imgView0, imgView1, imgView2,
             imgView3, imgView4, imgView5; //views to display saved photos
     private ImageView[] imgViews; //holds all imageviews for easy retrieval
-    private MyDatabase db;
+    private MyDatabase db; //database
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,13 +121,13 @@ public class SpecificRecord extends Activity implements View.OnClickListener {
 
                     //format and set calories text
                     double recordCalories = Double.parseDouble(cursor.getString(index6));
-                    recordedCaloriesText.setText(String.format("%.2f", recordCalories) + " kcal");
+                    recordedCaloriesText.setText(String.format("%.3f", recordCalories) + " kcal");
 
                     //format and set speed text
                     double recordSpeed = Double.parseDouble(cursor.getString(index7));
                     recordedSpeedText.setText(String.format("%.3f", recordSpeed) + " km/s");
 
-                    //get the photo data for the selected record
+                    //get the photo data for the selected record via its id
                     Cursor photoCursor = db.getPhotos(recordID);
                     int photoBytesIndex = photoCursor.getColumnIndex(Constants.PHOTO_CONTENT);
                     int photoCount = 0; //counts the photos, used to decide which imageView to use
@@ -139,6 +138,7 @@ public class SpecificRecord extends Activity implements View.OnClickListener {
                         Bitmap photoBitmap = Utility.toBitmap(photoBytes); //convert byte array to bitmap;
                         ImageView currentView = imgViews[photoCount]; //get an imageView
                         currentView.setImageBitmap(photoBitmap); //set the photo
+
                         photoCount++;
                         photoCursor.moveToNext();
                     }
@@ -148,12 +148,10 @@ public class SpecificRecord extends Activity implements View.OnClickListener {
                             currView.setVisibility(View.GONE); //get rid of the imageView
                         }
                     }
-
                     break; //exit loop if correct record is found
                 }
                 cursor.moveToNext();
             }
-
         }
     }
 
@@ -165,16 +163,19 @@ public class SpecificRecord extends Activity implements View.OnClickListener {
         startActivity(i);
     }
 
+    //navigate to settings activity
     public void gotoSettings(View view){
         Intent i = new Intent(this, Settings.class);
         startActivity(i);
     }
 
+    //navigate to dashboard activity
     public void gotoHome(View view) {
         Intent i = new Intent(this, UserDashboard.class);
         startActivity(i);
     }
 
+    //navigate to all records activity
     public void gotoRecords(View view) {
         Intent i = new Intent(this, AllRecords.class);
         startActivity(i);

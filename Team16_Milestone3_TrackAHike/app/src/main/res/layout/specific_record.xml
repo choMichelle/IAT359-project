@@ -38,7 +38,7 @@
                 android:background="@drawable/onerec_groupname"
                 android:gravity="start|center_vertical"
                 android:textColor="@color/white"
-                android:text="Text"
+                android:text="no group"
                 android:textSize="16sp"
                 android:paddingLeft="20dp"
                 android:paddingTop="10dp"

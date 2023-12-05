@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -100,6 +101,9 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
         distanceText = (TextView) findViewById(R.id.distanceTextView);
         caloriesText = (TextView) findViewById(R.id.caloriesTextView);
         speedText = (TextView) findViewById(R.id.speedTextView);
+
+        sessionName.setOnKeyListener(onSoftKeyboardDonePress);
+        sessionCategory.setOnKeyListener(onSoftKeyboardDonePress);
 
         //get stat tracking buttons
         startBtn = (Button) findViewById(R.id.startButton);
@@ -242,8 +246,8 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
             if (totalImgs == 6) {
                 for (int i = 0; i < totalImgs; i++) {
                     ImageView currentPhoto = imgViews[i];
-                    BitmapDrawable photoBitmap = (BitmapDrawable) currentPhoto.getDrawable();
-                    byte[] photoBytes = Utility.toBytes(photoBitmap.getBitmap());
+                    Bitmap photoBitmap = ((BitmapDrawable) currentPhoto.getDrawable()).getBitmap();
+                    byte[] photoBytes = Utility.toBytes(photoBitmap);
 
                     savedInstanceState.putByteArray("photo" + i, photoBytes); //save photo
                 }
@@ -251,8 +255,8 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
                 //loop through all photos to be saved
                 for (int i = 0; i < img_id; i++) {
                     ImageView currentPhoto = imgViews[i];
-                    BitmapDrawable photoBitmap = (BitmapDrawable) currentPhoto.getDrawable();
-                    byte[] photoBytes = Utility.toBytes(photoBitmap.getBitmap());
+                    Bitmap photoBitmap = ((BitmapDrawable) currentPhoto.getDrawable()).getBitmap();
+                    byte[] photoBytes = Utility.toBytes(photoBitmap);
 
                     savedInstanceState.putByteArray("photo" + i, photoBytes); //save photo
                 }
@@ -535,6 +539,18 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
     public void onClick(View v) {
 
     }
+
+    //get out of name/group name edit text after done typing
+    private View.OnKeyListener onSoftKeyboardDonePress = new View.OnKeyListener() {
+        public boolean onKey(View view, int keyCode, KeyEvent event) {
+            if (event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+                //hide keyboard after hitting enter
+                sessionName.clearFocus();
+                sessionCategory.clearFocus();
+            }
+            return false;
+        }
+    };
 
     //check if required permissions are granted, return boolean
     private boolean allPermissionsGranted() {

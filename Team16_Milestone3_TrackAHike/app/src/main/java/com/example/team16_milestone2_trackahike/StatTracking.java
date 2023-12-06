@@ -220,8 +220,8 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         //save name, group name
-        savedInstanceState.putString("name", sessionName.getText().toString());
-        savedInstanceState.putString("category", sessionCategory.getText().toString());
+        savedInstanceState.putString("name", sessionName.getText().toString().trim());
+        savedInstanceState.putString("category", sessionCategory.getText().toString().trim());
 
         //save stats values
         savedInstanceState.putInt("seconds", seconds);
@@ -306,8 +306,8 @@ public class StatTracking extends Activity implements View.OnClickListener, Sens
         mToneGen.startTone(ToneGenerator.TONE_PROP_BEEP); //beep sound feedback
 
         //get the tracking variables to save
-        String name = sessionName.getText().toString(); //name of session
-        String category = sessionCategory.getText().toString().toLowerCase(); //group name
+        String name = sessionName.getText().toString().trim(); //name of session
+        String category = sessionCategory.getText().toString().toLowerCase().trim(); //group name
         String time = String.valueOf(seconds); //time in seconds
         String steps = String.valueOf(totalSteps); //steps taken
         String distance = String.valueOf(totalDistance); //distance travelled (calculated)
